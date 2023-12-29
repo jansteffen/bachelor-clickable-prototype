@@ -1,0 +1,40 @@
+---
+interface Props {
+	title: string;
+	body?: string;
+	row?: boolean;
+}
+
+const { title, body, row = false } = Astro.props;
+---
+
+<div class:list={['details-element', (row ? 'row' : '')]}>
+	<h4>{title}</h4>
+	{ body ? <p>{body}</p> : null }
+	<slot />
+</div>
+
+<style>
+	.details-element {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 5px;
+	}
+
+	.details-element.row {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		gap: 20px;
+	}
+
+	.details-element h4 {
+		font-size: 11px;
+		font-weight: bold;
+	}
+
+	.details-element :global(p) {
+		font-size: 13px;
+	}
+</style>

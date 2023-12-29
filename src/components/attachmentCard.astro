@@ -1,0 +1,28 @@
+---
+interface Props {
+	name: string;
+	icon: string;
+}
+
+const { name, icon  } = Astro.props;
+---
+
+<div class:list={['attached-item', 'icon', icon ]}>
+	{name}
+</div>
+
+<style>
+	div.attached-item {
+		font-size: 13px;
+		border: 1px solid var(--borders);
+		border-radius: 5px;
+		padding: 10px 10px 10px 40px;
+		background-color: #f9f9f9;
+		cursor: pointer;
+	}
+
+	div.attached-item:hover {
+		background-color: #ffffff;
+		border-color: #66f;
+	}
+</style>

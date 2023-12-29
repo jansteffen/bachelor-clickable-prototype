@@ -1,0 +1,37 @@
+---
+import "../styles/style.css";
+import "../styles/icons.css";
+interface Props {
+	title?: string;
+}
+
+const { title = "Energiemanagement" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu:wght@300;400&display=swap" rel="stylesheet">
+		<title>{title}</title>
+	</head>
+	<body>
+		<article id="main">
+			<slot />
+		</article>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--borders: #D0D0D0;
+		--text: #242424;
+		--text-light: #535353;
+	}
+</style>
