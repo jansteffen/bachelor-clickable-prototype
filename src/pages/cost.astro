@@ -1,0 +1,35 @@
+---
+import LayoutDetails from "../layouts/LayoutDetails.astro";
+import DetailsElement from "../components/detailsElement.astro";
+---
+<LayoutDetails title="Austausch Klimaanlage" active="4">
+	<div class="tab-content">
+		<section class="main-content">
+			<DetailsElement row	title="Investition">
+				<input type="text" name="investment" placeholder="0€" />
+			</DetailsElement>
+			<DetailsElement row	title="Zinssätze">
+				<input type="text" name="returns" placeholder="0%" />
+			</DetailsElement>
+			<DetailsElement row	title="Laufzeit Beginn">
+				<input type="text" name="investment" placeholder="01.01.2024" />
+			</DetailsElement>
+			<DetailsElement row	title="Laufzeit Ende">
+				<input type="text" name="investment" placeholder="01.01.2025" />
+			</DetailsElement>
+			<hr />
+			<DetailsElement title="Amortisation">
+				Bisherige Gesamtkosten pro Jahr:                  xxxxx €
+				Totale prognostiziertes Ersparnis pro Jahr:       yyyyy €
+				Prognostizierte Gesamtkosten pro Jahr:          zzzzz €
+				Jahre bis Amortisierung:                               T Jahre
+
+				Kapitalwert:                                               xxxxxxx
+			</DetailsElement>
+			<hr />
+			<DetailsElement title="Zeitverlauf">
+				<img src="/img/graph.png" alt="Graph" style="align-self: start" />
+			</DetailsElement>
+		</section>
+	</div>
+</LayoutOuter>

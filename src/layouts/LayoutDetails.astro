@@ -6,15 +6,23 @@ interface Props {
 }
 
 const { title, active = "1" } = Astro.props;
+let activeTab = parseInt(active);
+//document.getElementsByTagName("nav")[0].children[activeTab].classList.add("active");
+
+function activeTabClass():string {
+	activeTab--;
+	return activeTab === 0 ? "active" : "";
+}
+
 ---
 <LayoutOuter title={ (title + " - Maßnahme Details") }>
 	<a href="/" id="return">Zurück zur Übersicht</a>
 	<h2>{title}</h2>
 	<nav>
-		<a href="/basics">Basisdaten</a>
-		<a href="/protocol">Bearbeitung</a>
-		<a href="/energy">Energieeffizienz</a>
-		<a href="/cost">Wirtschaftlichkeit</a>
+		<a href="/basics" class:list={activeTabClass()}>Basisdaten</a>
+		<a href="/protocol" class:list={activeTabClass()}>Bearbeitung</a>
+		<a href="/energy" class:list={activeTabClass()}>Energieeffizienz</a>
+		<a href="/cost" class:list={activeTabClass()}>Wirtschaftlichkeit</a>
 	</nav>
 	<div class="tab-container">
 		<slot />
@@ -59,7 +67,7 @@ const { title, active = "1" } = Astro.props;
 		color: var(--text);
 	}
 
-	nav a:nth-of-type(1) {
+	nav a.active {
 		color: var(--text);
 		background-color: #f3f3f3;
 		border: var(--borders) 1px solid;

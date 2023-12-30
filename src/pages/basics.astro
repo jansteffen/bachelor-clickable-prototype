@@ -7,17 +7,19 @@ import AttachmentCard from "../components/attachmentCard.astro";
 	<div class="tab-content">
 		<section class="main-content">
 			<DetailsElement
-				title="Austausch Klimaanlage"
+				title="Beschreibung"
 				body="Unsere aktuelle Klimaanlage frisst viel zu viel Strom und soll durch eine neue, effizientere ausgetauscht werden. Die neue Anlage wurde bereits geliefert und liegt in Warenhaus B. Außerdem kann sie dann von enerchart gesteuert werden."
 			/>
 
 			<DetailsElement title="Angehängte Dokumente">
 				<AttachmentCard name="Rechnung_Klimaanlage_Einkauf.pdf" icon="iconPdf" />
 				<AttachmentCard name="technisches_datenblatt.pdf" icon="iconPdf" />
+				<button class="icon iconPlus" style="align-self: start">Dokument hinzufügen</button>
 			</DetailsElement>
 
 			<DetailsElement title="Verbundene Datenpunkte">
 				<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
+				<button class="icon iconPlus" style="align-self: start">Datenpunkt hinzufügen</button>
 			</DetailsElement>
 		</section>
 		<section class="sidebar">
