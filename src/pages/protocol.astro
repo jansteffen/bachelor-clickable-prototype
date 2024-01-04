@@ -1,40 +1,91 @@
 ---
 import LayoutDetails from "../layouts/LayoutDetails.astro";
 import DetailsElement from "../components/detailsElement.astro";
+import ProtocolEntry from "../components/protocolEntry.astro";
 ---
 <LayoutDetails title="Austausch Klimaanlage" active="2">
 	<div class="tab-content">
 		<section class="main-content">
-			<DetailsElement
-				title="Geschätzter Gesamtfortschritt"
-				body="5% abgeschlossen"
-			/>
+			<DetailsElement	title="Geschätzter Gesamtfortschritt" >
+				<div class="progress">
+					<div class="progress-bar" style="width: 10%">10%</div>
+				</div>
+			</DetailsElement>
 
 			<DetailsElement title="Neuen Fortschritt protokolieren">
-				<textarea name="comment" rows="2" placeholder="Ergänzen Sie das Protokoll um eine weitere Notiz..."></textarea>
-			</DetailsElement>
-			<DetailsElement title="Fortschritt Schätzung" row>
-					<input type="number" name="progress" placeholder="0" min="0" max="100" value="5" />
-					<input type="button" value="Datei anhängen" class="icon iconPlus" />
-					<input type="button" value="Speichern" class="icon iconFile" />
+				<textarea name="comment" rows="3" placeholder="Ergänzen Sie das Protokoll um eine weitere Notiz..."></textarea>
+				<section id="buttons">
+					<label>
+						Fortschritt Schätzung:
+						<input type="number" name="progress" placeholder="0" min="10" max="100" value="10" />
+					</label>
+					<input type="button" value="Datei anhängen" class="icon iconAttachment" />
+					<input type="button" value="Speichern" class="icon iconSave" />
+				</section>
 			</DetailsElement>
 			<hr />
-			<DetailsElement 
-				title="Otto Normal protokolliert 5% am 29. Oktober 2023"
-				body="Die ersten Teile wurden Heute zusammengebaut und für den Einbau vorbereitet."	
-			/>
-			<DetailsElement 
-				title="Max Mustermann hat Otto Normal zugewiesen am 23. September 2023"
-				row
-			/>
-			<DetailsElement 
-				title="Max Mustermann am 18. September 2023"
-				body="Die neue Anlage wurde geliefert und gelagert, die Hausverwaltung und der Elektriker wissen Bescheid."	
-			/>
-			<DetailsElement 
-				title="Max Mustermann hat diese Maßnahme erstellt am 16. September 2023"
-				row
-			/>
+			<DetailsElement title="Bearbeitungsprotokoll" />
+			<ProtocolEntry body="Die ersten Teile wurden Heute zusammengebaut und für den Einbau vorbereitet.">
+				<b>Otto Normal</b> protokolliert <b>10%</b> am 29. Oktober 2023
+			</ProtocolEntry>
+			<ProtocolEntry centered>
+				<b>Max Mustermann</b> hat <b>Otto Normal</b> zugewiesen am 23. September 2023
+			</ProtocolEntry>
+			<ProtocolEntry body="Die ersten Teile wurden Heute zusammengebaut und für den Einbau vorbereitet.">
+				<b>Max Mustermann</b> am 18. September 2023
+			</ProtocolEntry>
+			<ProtocolEntry centered>
+				<b>Max Mustermann</b> hat diese Maßnahme erstellt am 16. September 2023
+			</ProtocolEntry>
 		</section>
 	</div>
 </LayoutOuter>
+<style>
+	#buttons {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 20px
+	}
+
+	label {
+		display: flex;
+		flex-direction: row;
+		line-height: 23px;
+		gap: 5px;
+		background-color: #fff;
+		border-radius: 3px;
+		font-size: 14px;
+		padding: 5px 8px;
+		color: var(--text);
+	}
+
+	.progress {
+		background-color: var(--borders);
+		border-radius: 100px;
+	}
+
+	.progress-bar {
+		background-color: #1ccc5f;
+		border-radius: 100px;
+		font-size: 13px;
+		line-height: 15px;
+		padding: 6px 0px 5px 0px;
+		text-align: center;
+		color: #fff;
+	}
+
+	input[type="number"] {
+		text-align: left;
+		padding: 0;
+		min-width: 50px;
+		width: 50px;
+	}
+
+	input[type="number"]::after {
+		display: block;
+		color: var(--text);
+		font-size: 14px;
+		content: "%";
+	}
+</style>

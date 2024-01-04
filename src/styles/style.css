@@ -100,7 +100,7 @@ input[type=text], textarea, input[type=number] {
 	border: none;
 	outline: none;
 	resize: none;
-	text-align: right;
+	/* text-align: right; */
 }
 
 /* Colorize placeholder text when empty */
@@ -109,12 +109,12 @@ input[type=text]::placeholder, textarea::placeholder {
 }
 
 /* Reactive to mouse-over*/
-input[type=text]:hover, textarea:hover, input[type=number]:hover {
+input[type=text]:hover, textarea:hover {
 	box-shadow: 0 3px 0 #ccc;
 }
 
 /* Reactive to being used */
-input[type=text]:focus, textarea:focus, input[type=number]:focus {
+input[type=text]:focus, textarea:focus {
 	box-shadow: 0 3px 0 #66f;
 }
 
