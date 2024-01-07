@@ -1,40 +1,48 @@
 ---
 import LayoutDetails from "../layouts/LayoutDetails.astro";
 import DetailsElement from "../components/detailsElement.astro";
+import AttachmentCard from "../components/attachmentCard.astro";
+import DetailsGrouping from "../components/detailsGrouping.astro";
 ---
 <LayoutDetails title="Austausch Klimaanlage" active="3">
 	<div class="tab-content">
 		<section class="main-content">
-			<DetailsElement
-				title="Geschätzter Gesamtfortschritt"
-				body="5% abgeschlossen"
-			/>
 
-			<DetailsElement title="Neuen Fortschritt protokolieren">
-				<textarea name="comment" rows="2" placeholder="Ergänzen Sie das Protokoll um eine weitere Notiz..."></textarea>
+			<DetailsElement title="Betroffene Energieträger">
+				<DetailsGrouping title="Strom EnBW">
+					<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
+						<input type="text" value="27.400 kWh" />
+					</DetailsElement>
+					
+					<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
+						<input type="text" value="9.200 kWh" />
+					</DetailsElement>
+					<hr />
+					
+					<DetailsElement	title="Verbundene Datenpunkte">
+						<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement row	title="Methode der Nachweisführung">
+						<input type="text" value="Manuelle Messung" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
+						<ul>
+							<li>Strom: 9.200 kWh</li>
+							<li>CO2: 4.600 kg</li>
+							<li>Kosten: 1.333 €</li>
+						</ul>
+					</DetailsElement>
+				</DetailsGrouping>
 			</DetailsElement>
-			<DetailsElement title="Fortschritt Schätzung" row>
-					<input type="number" name="progress" placeholder="0" min="0" max="100" value="5" />
-					<input type="button" value="Datei anhängen" class="icon iconPlus" />
-					<input type="button" value="Speichern" class="icon iconFile" />
-			</DetailsElement>
-			<hr />
-			<DetailsElement 
-				title="Otto Normal protokolliert 5% am 29. Oktober 2023"
-				body="Die ersten Teile wurden Heute zusammengebaut und für den Einbau vorbereitet."	
-			/>
-			<DetailsElement 
-				title="Max Mustermann hat Otto Normal zugewiesen am 23. September 2023"
-				row
-			/>
-			<DetailsElement 
-				title="Max Mustermann am 18. September 2023"
-				body="Die neue Anlage wurde geliefert und gelagert, die Hausverwaltung und der Elektriker wissen Bescheid."	
-			/>
-			<DetailsElement 
-				title="Max Mustermann hat diese Maßnahme erstellt am 16. September 2023"
-				row
-			/>
+			<button class="icon iconPlus" style="align-self: start">Weitere hinzufügen</button>
 		</section>
 	</div>
 </LayoutOuter>
+
+<style>
+	input[type="text"] {
+		text-align: right;
+	}
+</style>

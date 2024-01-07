@@ -2,7 +2,7 @@
 html {
 	height: 100%;
 	font-family: 'Istok Web', 'Leelawadee UI Semilight', 'Ubuntu', 'Montserrat', sans-serif;
-	font-size: 18px;
+	font-size: 14px;
 	color: var(--text);
 	background-color: #e9e9e9;
 }
@@ -58,27 +58,6 @@ hr {
 
 .sidebar {
 	min-width: 350px;
-}
-
-.details-grouping {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	border: 1px solid var(--borders);
-	border-radius: 5px;
-	padding: 10px;
-	justify-content: stretch;
-}
-
-.details-grouping h3 {
-	font-size: 13px;
-	font-weight: normal;
-	padding-bottom: 5px;
-	border-bottom: 1px solid var(--borders);
-}
-
-.details-grouping .details-element.row * {
-	width: 50%;
 }
 
 /* <labels> act as a container for both their text and their input field so that both can be positioned/aligned as a pair */

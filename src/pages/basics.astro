@@ -2,6 +2,7 @@
 import LayoutDetails from "../layouts/LayoutDetails.astro";
 import DetailsElement from "../components/detailsElement.astro";
 import AttachmentCard from "../components/attachmentCard.astro";
+import DetailsGrouping from "../components/detailsGrouping.astro";
 ---
 <LayoutDetails title="Austausch Klimaanlage" active="1">
 	<div class="tab-content">
@@ -23,8 +24,7 @@ import AttachmentCard from "../components/attachmentCard.astro";
 			</DetailsElement>
 		</section>
 		<section class="sidebar">
-			<section class="details-grouping">
-				<h3>Details</h3>
+			<DetailsGrouping title="Details">
 				<DetailsElement row 
 					title="Status"
 					body="In Bearbeitung"
@@ -61,7 +61,7 @@ import AttachmentCard from "../components/attachmentCard.astro";
 					title="Zuletzt aktualisiert am"
 					body="29. Oktober 2023"
 				/>
-			</section>
+			</DetailsGrouping>
 		</section>
 	</div>
 </LayoutOuter>

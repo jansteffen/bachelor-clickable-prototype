@@ -5,6 +5,40 @@ import DetailsElement from "../components/detailsElement.astro";
 <LayoutDetails title="Austausch Klimaanlage" active="4">
 	<div class="tab-content">
 		<section class="main-content">
+			<DetailsElement title="Eingaben">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>Wahrscheinlichster Fall</th>
+							<th>Best case</th>
+							<th>Worst case</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Investition (€)</td>
+							<td><input type="text" value="23000" placeholder="-" /></td>
+							<td><input type="text" placeholder="-" /></td>
+							<td><input type="text" placeholder="-" /></td>
+						</tr>
+						<tr>
+							<td>Kalkulatorischer Zinssatz (%)</td>
+							<td><input type="text" placeholder="-" value="5,5"/></td>
+							<td><input type="text" placeholder="-" /></td>
+							<td><input type="text" placeholder="-" /></td>
+						</tr>
+						<tr>
+							<td>Nutzungsdauer (Jahre)</td>
+							<td><input type="text" placeholder="-" value="8"/></td>
+							<td><input type="text" placeholder="-" /></td>
+							<td><input type="text" placeholder="-" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</DetailsElement>
+			
+			<!--
 			<DetailsElement row	title="Investition">
 				<input type="text" name="investment" placeholder="0€" />
 			</DetailsElement>
@@ -17,14 +51,39 @@ import DetailsElement from "../components/detailsElement.astro";
 			<DetailsElement row	title="Laufzeit Ende">
 				<input type="text" name="investment" placeholder="01.01.2025" />
 			</DetailsElement>
+			 -->
 			<hr />
-			<DetailsElement title="Amortisation">
-				Bisherige Gesamtkosten pro Jahr:                  xxxxx €
-				Totale prognostiziertes Ersparnis pro Jahr:       yyyyy €
-				Prognostizierte Gesamtkosten pro Jahr:          zzzzz €
-				Jahre bis Amortisierung:                               T Jahre
-
-				Kapitalwert:                                               xxxxxxx
+			<DetailsElement title="Ergebnisse der Berechnung">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>Wahrscheinlichster Fall</th>
+							<th>Best case</th>
+							<th>Worst case</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Investition (€)</td>
+							<td>23000</td>
+							<td>-</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Kalkulatorischer Zinssatz (%)</td>
+							<td>5,5</td>
+							<td>-</td>
+							<td>-</td>
+						</tr>
+						<tr>
+							<td>Nutzungsdauer (Jahre)</td>
+							<td>8</td>
+							<td>-</td>
+							<td>-</td>
+						</tr>
+					</tbody>
+				</table>
 			</DetailsElement>
 			<hr />
 			<DetailsElement title="Zeitverlauf">
@@ -33,3 +92,23 @@ import DetailsElement from "../components/detailsElement.astro";
 		</section>
 	</div>
 </LayoutOuter>
+
+<style>
+	td, th {
+		font-size: 13px;
+		color: var(--text);
+		padding: 5px;
+		text-align: right;
+	}
+
+	td:first-of-type {
+		text-align: left;
+	}
+
+	th {
+		font-size: 11px;
+	}
+	input[type="text"] {
+		text-align: right;
+	}
+</style>

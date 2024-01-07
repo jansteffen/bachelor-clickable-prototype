@@ -1,0 +1,118 @@
+---
+import LayoutOuter from "../layouts/LayoutOuter.astro";
+import DetailsElement from "../components/detailsElement.astro";
+---
+<LayoutOuter>
+    <section id="filterbar">
+        <h2>Liste aktiver Energieträger:</h2>
+        <input type="button" value="Neuen Energieträger hinzufügen" class="icon iconPlus" />
+    </section>
+    
+    <div class="carrier">
+        <section class="base-info">
+            <h1 class="carrier-name">Strom EnBW Vertrag</h1>
+            <h1 class="carrier-type">Strom</h1>
+        </section>
+        <section class="graph"></section>
+        <section class="values">
+            <DetailsElement row
+					title="Preis pro kWh"
+					body="0,21€"
+				/>
+				<DetailsElement row 
+					title="CO2 Ausstoß pro kWh"
+					body="0,21kg"
+				/>
+				<DetailsElement row
+					title="Brennwert"
+					body="1kWh = 1kWh"
+				/>
+        </section>
+    </div>
+
+    <div class="carrier">
+        <section class="base-info">
+            <h1 class="carrier-name">Stadtwerke KA Heizöl</h1>
+            <h1 class="carrier-type">Öl</h1>
+        </section>
+        <section class="graph"></section>
+        <section class="values">
+            <DetailsElement row
+					title="Preis pro kWh"
+					body="0,21€"
+				/>
+				<DetailsElement row 
+					title="CO2 Ausstoß pro kWh"
+					body="0,21kg"
+				/>
+				<DetailsElement row
+					title="Brennwert"
+					body="1kWh = 1kWh"
+				/>
+        </section>
+    </div>
+</LayoutOuter>
+<style>
+    #filterbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .carrier {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+        border: 1px solid var(--borders);
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .base-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+        border-right: 1px solid var(--borders);
+    }
+
+    .base-info > h1 {
+        padding: 20px;
+        font-weight: normal;
+        text-align: center;
+        line-height: 25px;
+        width: 200px;
+    }
+
+    .base-info > h1.carrier-name {
+        font-size: 16px;
+		background-color: #f9f9f9;
+        border-bottom: 1px solid var(--borders);
+    }
+
+    .base-info > h1.carrier-type {
+	    background-color: #e9e9e9;
+        font-weight: bold;
+        color: var(--text-light);
+        font-size: 18px;
+    }
+
+    .graph {
+        flex-grow: 1;
+        background-color: #666;
+    }
+
+    .values {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+
+    .values :global(.row > *) {
+        width: 5o%;
+    }
+</style>
