@@ -35,6 +35,32 @@ import DetailsGrouping from "../components/detailsGrouping.astro";
 						</ul>
 					</DetailsElement>
 				</DetailsGrouping>
+				<DetailsGrouping title="Stadtwerke KA Heizöl">
+					<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
+						<input type="text" value="27.400 kWh" />
+					</DetailsElement>
+					
+					<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
+						<input type="text" value="9.200 kWh" />
+					</DetailsElement>
+					<hr />
+					
+					<DetailsElement	title="Verbundene Datenpunkte">
+						<AttachmentCard name="Heizung Ablesegeräte" icon="iconMeter" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement row	title="Methode der Nachweisführung">
+						<input type="text" value="Manuelle Messung" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
+						<ul>
+							<li>Strom: 9.200 kWh</li>
+							<li>CO2: 4.600 kg</li>
+							<li>Kosten: 1.333 €</li>
+						</ul>
+					</DetailsElement>
+				</DetailsGrouping>
 			</DetailsElement>
 			<button class="icon iconPlus" style="align-self: start">Weitere hinzufügen</button>
 		</section>
