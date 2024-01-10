@@ -9,60 +9,70 @@ import DetailsGrouping from "../components/detailsGrouping.astro";
 		<section class="main-content">
 
 			<DetailsElement title="Betroffene Energieträger">
-				<DetailsGrouping title="Strom EnBW">
-					<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
-						<input type="text" value="27.400 kWh" />
-					</DetailsElement>
-					
-					<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
-						<input type="text" value="9.200 kWh" />
-					</DetailsElement>
-					<hr />
-					
-					<DetailsElement	title="Verbundene Datenpunkte">
-						<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
-					</DetailsElement>
-					<hr />
-					<DetailsElement row	title="Methode der Nachweisführung">
-						<input type="text" value="Manuelle Messung" />
-					</DetailsElement>
-					<hr />
-					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
-						<ul>
-							<li>Strom: 9.200 kWh</li>
-							<li>CO2: 4.600 kg</li>
-							<li>Kosten: 1.333 €</li>
-						</ul>
-					</DetailsElement>
-				</DetailsGrouping>
-				<DetailsGrouping title="Stadtwerke KA Heizöl">
-					<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
-						<input type="text" value="27.400 kWh" />
-					</DetailsElement>
-					
-					<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
-						<input type="text" value="9.200 kWh" />
-					</DetailsElement>
-					<hr />
-					
-					<DetailsElement	title="Verbundene Datenpunkte">
-						<AttachmentCard name="Heizung Ablesegeräte" icon="iconMeter" />
-					</DetailsElement>
-					<hr />
-					<DetailsElement row	title="Methode der Nachweisführung">
-						<input type="text" value="Manuelle Messung" />
-					</DetailsElement>
-					<hr />
-					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
-						<ul>
-							<li>Strom: 9.200 kWh</li>
-							<li>CO2: 4.600 kg</li>
-							<li>Kosten: 1.333 €</li>
-						</ul>
-					</DetailsElement>
-				</DetailsGrouping>
+				<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px;">
+					<DetailsGrouping title="Strom EnBW">
+						<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
+							<input type="text" value="27.400 kWh" />
+						</DetailsElement>
+						
+						<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
+							<input type="text" value="9.200 kWh" />
+						</DetailsElement>
+						<hr />
+						
+						<DetailsElement	title="Verbundene Datenpunkte">
+							<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
+						</DetailsElement>
+						<hr />
+						<DetailsElement row	title="Methode der Nachweisführung">
+							<input type="text" value="Manuelle Messung" />
+						</DetailsElement>
+						<hr />
+						<DetailsElement title="Berechnete Einsparung (pro Jahr)">
+							<ul>
+								<li>Leistung: 9.200 kWh</li>
+								<li>CO2: 5.336,9 kg</li>
+								<li>Kosten: 1.932 €</li>
+							</ul>
+						</DetailsElement>
+					</DetailsGrouping>
+					<DetailsGrouping title="Stadtwerke KA Heizöl">
+						<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
+							<input type="text" value="14.900 kWh" />
+						</DetailsElement>
+						
+						<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
+							<input type="text" value="1.200 kWh" />
+						</DetailsElement>
+						<hr />
+						
+						<DetailsElement	title="Verbundene Datenpunkte">
+							<AttachmentCard name="Heizung Ablesegeräte" icon="iconMeter" />
+						</DetailsElement>
+						<hr />
+						<DetailsElement row	title="Methode der Nachweisführung">
+							<input type="text" value="Manuelle Messung" />
+						</DetailsElement>
+						<hr />
+						<DetailsElement title="Berechnete Einsparung (pro Jahr)">
+							<ul>
+								<li>Leistung: 1.200 kWh</li>
+								<li>CO2: 390 kg</li>
+								<li>Kosten: 312 €</li>
+							</ul>
+						</DetailsElement>
+					</DetailsGrouping>
+				</div>
 			</DetailsElement>
 			<button class="icon iconPlus" style="align-self: start">Weitere hinzufügen</button>
+			<hr />
+			<DetailsGrouping title="Berechnete Einsparung Gesamt (pro Jahr)">
+				<ul>
+					<li>Leistung: 10.400 kWh</li>
+					<li>CO2: 5.726,9 kg</li>
+					<li>Kosten: 2.244 €</li>
+				</ul>
+			</DetailsGrouping>
 		</section>
 	</div>
 </LayoutOuter>
