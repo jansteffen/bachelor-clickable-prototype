@@ -79,26 +79,38 @@ input[type=text], textarea, input[type=number] {
 	border: none;
 	outline: none;
 	resize: none;
-	/* text-align: right; */
 }
 
 /* Colorize placeholder text when empty */
-input[type=text]::placeholder, textarea::placeholder {
+input::placeholder, textarea::placeholder {
 	color: #444;
 }
 
 /* Reactive to mouse-over*/
-input[type=text]:hover, textarea:hover {
+input[type=text]:hover, input[type=number]:hover, textarea:hover {
 	box-shadow: 0 3px 0 #ccc;
 }
 
 /* Reactive to being used */
-input[type=text]:focus, textarea:focus {
+input[type=text]:focus, input[type=number]:focus, textarea:focus {
 	box-shadow: 0 3px 0 #66f;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  display: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  appearance: textfield;
+}
+
 /* Make placeholder text disappear as soon as input becomes focused */
-input[type=text]:focus::placeholder, textarea:focus::placeholder {
+input[type=text]:focus::placeholder, input[type=number]:focus::placeholder, textarea:focus::placeholder {
 	color: #fff;
 }
 

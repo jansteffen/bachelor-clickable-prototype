@@ -7,16 +7,13 @@ import DetailsGrouping from "../components/detailsGrouping.astro";
 <LayoutDetails title="Austausch Klimaanlage" active="3">
 	<div class="tab-content">
 		<section class="main-content">
-
-			<DetailsElement title="Betroffene Energieträger">
-				<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px;">
 					<DetailsGrouping title="Strom EnBW">
-						<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
-							<input type="text" value="27.400 kWh" />
+						<DetailsElement row	title="Verbrauch bisher (kWh pro Jahr)">
+							<input type="number" value="27400" placeholder="0" />
 						</DetailsElement>
 						
-						<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
-							<input type="text" value="9.200 kWh" />
+						<DetailsElement row	title="Prognostizierte Einsparung (kWh pro Jahr)">
+							<input type="number" value="9200" placeholder="0" />
 						</DetailsElement>
 						<hr />
 						
@@ -37,12 +34,12 @@ import DetailsGrouping from "../components/detailsGrouping.astro";
 						</DetailsElement>
 					</DetailsGrouping>
 					<DetailsGrouping title="Stadtwerke KA Heizöl">
-						<DetailsElement row	title="Verbrauch bisher (pro Jahr)">
-							<input type="text" value="14.900 kWh" />
+						<DetailsElement row	title="Verbrauch bisher (kWh pro Jahr)">
+							<input type="number" value="14900" placeholder="0" />
 						</DetailsElement>
 						
-						<DetailsElement row	title="Prognostizierte Einsparung (pro Jahr)">
-							<input type="text" value="1.200 kWh" />
+						<DetailsElement row	title="Prognostizierte Einsparung (kWh pro Jahr)">
+							<input type="number" value="1200" placeholder="0" />
 						</DetailsElement>
 						<hr />
 						
@@ -62,23 +59,20 @@ import DetailsGrouping from "../components/detailsGrouping.astro";
 							</ul>
 						</DetailsElement>
 					</DetailsGrouping>
-				</div>
-			</DetailsElement>
 			<button class="icon iconPlus" style="align-self: start">Weitere hinzufügen</button>
-			<hr />
+		</section>
+		<section class="sidebar">
 			<DetailsGrouping title="Berechnete Einsparung Gesamt (pro Jahr)">
-				<ul>
-					<li>Leistung: 10.400 kWh</li>
-					<li>CO2: 5.726,9 kg</li>
-					<li>Kosten: 2.244 €</li>
-				</ul>
+				<DetailsElement title="Leistung" body="10.400 kWh" row />
+				<DetailsElement title="CO2" body="5.726,9 kg" row />
+				<DetailsElement title="Kosten" body="2.244 €" row />
 			</DetailsGrouping>
 		</section>
 	</div>
 </LayoutOuter>
 
 <style>
-	input[type="text"] {
+	input[type="text"], input[type="number"] {
 		text-align: right;
 	}
 </style>
