@@ -1,0 +1,64 @@
+---
+import DetailsElement from "./detailsElement.astro";
+import AttachmentCard from "./attachmentCard.astro";
+import DetailsGrouping from "./detailsGrouping.astro";
+---
+<div class="tab-content" id="tabBasics">
+	<section class="main-content">
+		<DetailsElement
+			title="Beschreibung"
+			body="Unsere aktuelle Klimaanlage frisst viel zu viel Strom und soll durch eine neue, effizientere ausgetauscht werden. Die neue Anlage wurde bereits geliefert und liegt in Warenhaus B. Außerdem kann sie dann von enerchart gesteuert werden."
+		/>
+
+		<DetailsElement title="Angehängte Dokumente">
+			<AttachmentCard name="Rechnung_Klimaanlage_Einkauf.pdf" icon="iconPdf" />
+			<AttachmentCard name="technisches_datenblatt.pdf" icon="iconPdf" />
+			<button class="icon iconPlus" style="align-self: start">Dokument hinzufügen</button>
+		</DetailsElement>
+
+		<DetailsElement title="Verbundene Datenpunkte">
+			<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
+			<button class="icon iconPlus" style="align-self: start">Datenpunkt hinzufügen</button>
+		</DetailsElement>
+	</section>
+	<section class="sidebar">
+		<DetailsGrouping title="Details">
+			<DetailsElement row 
+				title="Status"
+				body="In Bearbeitung"
+			/>
+			<DetailsElement row
+				title="Priorität"
+				body="Mittel"
+			/>
+			<DetailsElement row 
+				title="Zugewiesener Mitarbeiter"
+				body="Max Mustermann"
+			/>
+			<DetailsElement row
+				title="Ersteller"
+				body="Bob Beispiel"
+			/>
+			<DetailsElement row
+				title="Kontrolleur"
+				body="Otto Normal"
+			/>
+			<DetailsElement row
+				title="Datum der Realisierung"
+				body="23. Dezember 2023"
+			/>
+			<DetailsElement row
+				title="Frequenz"
+				body="Einmalig"
+			/>
+			<DetailsElement row
+				title="Erstellt am"
+				body="16. September 2023"
+			/>
+			<DetailsElement row
+				title="Zuletzt aktualisiert am"
+				body="29. Oktober 2023"
+			/>
+		</DetailsGrouping>
+	</section>
+</div>

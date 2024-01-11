@@ -1,0 +1,75 @@
+---
+import DetailsElement from "./detailsElement.astro";
+import AttachmentCard from "./attachmentCard.astro";
+import DetailsGrouping from "./detailsGrouping.astro";
+---
+<div class="tab-content" id="tabEnergy">
+	<section class="main-content">
+				<DetailsGrouping title="Strom EnBW">
+					<DetailsElement row	title="Verbrauch bisher (kWh pro Jahr)">
+						<input type="number" value="27400" placeholder="0" />
+					</DetailsElement>
+					
+					<DetailsElement row	title="Prognostizierte Einsparung (kWh pro Jahr)">
+						<input type="number" value="9200" placeholder="0" class="inputEnergy" name="savings1" />
+					</DetailsElement>
+					<hr />
+					
+					<DetailsElement	title="Verbundene Datenpunkte">
+						<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement row	title="Methode der Nachweisführung">
+						<input type="text" value="Manuelle Messung" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
+						<ul>
+							<li>Leistung: 9.200 kWh</li>
+							<li>CO2: 5.336,9 kg</li>
+							<li>Kosten: 1.932 €</li>
+						</ul>
+					</DetailsElement>
+				</DetailsGrouping>
+				<DetailsGrouping title="Stadtwerke KA Heizöl">
+					<DetailsElement row	title="Verbrauch bisher (kWh pro Jahr)">
+						<input type="number" value="14900" placeholder="0" />
+					</DetailsElement>
+					
+					<DetailsElement row	title="Prognostizierte Einsparung (kWh pro Jahr)">
+						<input type="number" value="1200" placeholder="0" class="inputEnergy" name="savings2" />
+					</DetailsElement>
+					<hr />
+					
+					<DetailsElement	title="Verbundene Datenpunkte">
+						<AttachmentCard name="Heizung Ablesegeräte" icon="iconMeter" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement row	title="Methode der Nachweisführung">
+						<input type="text" value="Manuelle Messung" />
+					</DetailsElement>
+					<hr />
+					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
+						<ul>
+							<li>Leistung: 1.200 kWh</li>
+							<li>CO2: 390 kg</li>
+							<li>Kosten: 312 €</li>
+						</ul>
+					</DetailsElement>
+				</DetailsGrouping>
+		<button class="icon iconPlus" style="align-self: start">Weitere hinzufügen</button>
+	</section>
+	<section class="sidebar">
+		<DetailsGrouping title="Berechnete Einsparung Gesamt (pro Jahr)">
+			<DetailsElement title="Leistung" body="10.400 kWh" row />
+			<DetailsElement title="CO2" body="5.726,9 kg" row />
+			<DetailsElement title="Kosten" body="2.244 €" row />
+		</DetailsGrouping>
+	</section>
+</div>
+
+<style>
+	input[type="text"], input[type="number"] {
+		text-align: right;
+	}
+</style>

@@ -1,32 +1,69 @@
 ---
 import LayoutOuter from "../layouts/LayoutOuter.astro";
-interface Props {
-	title: string;
-	active?: string;
-}
-
-const { title, active = "1" } = Astro.props;
-let activeTab = parseInt(active);
-
-function activeTabClass():string {
-	activeTab--;
-	return activeTab === 0 ? "active" : "";
-}
-
+import Basics from "../components/basics.astro";
+import Protocol from "../components/protocol.astro";
+import Energy from "../components/energy.astro";
+import Cost from "../components/cost.astro";
 ---
-<LayoutOuter title={ (title + " - Maßnahme Details") }>
+<LayoutOuter title="Austausch Klimaanlage - Maßnahme Details">
 	<a href="/" id="return">Zurück zur Übersicht</a>
-	<h2>{title}</h2>
+	<h2>Austausch Klimaanlage</h2>
 	<nav>
-		<a href="/basics" class:list={activeTabClass()}>Basisdaten</a>
-		<a href="/protocol" class:list={activeTabClass()}>Bearbeitung</a>
-		<a href="/energy" class:list={activeTabClass()}>Energieeffizienz</a>
-		<a href="/cost" class:list={activeTabClass()}>Wirtschaftlichkeit</a>
+		<a>Basisdaten</a>
+		<a>Bearbeitung</a>
+		<a>Energieeffizienz</a>
+		<a>Wirtschaftlichkeit</a>
 	</nav>
 	<div class="tab-container">
-		<slot />
+		<Basics />
+		<Protocol />
+		<Energy />
+		<Cost />
 	</div>
 </LayoutOuter>
+
+<script>
+	//#region Tab Handling
+	let tabLinks = document.getElementsByTagName("nav")[0].children;
+	for (let i = 0; i < tabLinks.length; i++) {
+		tabLinks[i].addEventListener("click", function() {
+			switchTab(i);
+		});
+	}
+
+	switchTab(0);
+
+	function switchTab(tabNumber:number) {
+		let tabs = document.getElementsByClassName("tab-content");
+		
+		for (let i = 0; i < tabs.length; i++) {
+			tabs[i].classList.remove("active");
+			tabLinks[i].classList.remove("active");
+		}
+		tabs[tabNumber].classList.add("active");
+		document.getElementsByTagName("nav")[0].children[tabNumber].classList.add("active");
+	}
+	//#endregion
+
+	//#region Form Handling
+	let inputsEnergy = document.getElementsByClassName("inputEnergy");
+	for (let i = 0; i < inputsEnergy.length; i++) {
+		inputsEnergy[i].addEventListener("focusout", parseEnergy);
+		inputsEnergy[i].addEventListener("change", parseEnergy);
+	}
+
+	function parseEnergy() {
+		let totalEnergy:number = 0;
+		for (let i = 0; i < inputsEnergy.length; i++) {
+			let value = parseFloat((inputsEnergy[i] as HTMLInputElement).value);
+			if (!isNaN(value)) {
+				totalEnergy += value;
+			}
+		}
+		console.log(totalEnergy);
+	}
+	//#endregion
+</script>
 
 <style>
 	#return {
@@ -64,6 +101,7 @@ function activeTabClass():string {
 
 	nav a:hover {
 		color: var(--text);
+		cursor: pointer;
 	}
 
 	nav a.active {

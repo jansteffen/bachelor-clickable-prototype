@@ -1,0 +1,96 @@
+---
+import DetailsElement from "./detailsElement.astro";
+---
+<div class="tab-content" id="tabCost">
+	<section class="main-content">
+		<DetailsElement title="Eingaben">
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Wahrscheinlichster Fall</th>
+						<th>Best case</th>
+						<th>Worst case</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Investition (€)</td>
+						<td><input type="text" value="23000" placeholder="-" /></td>
+						<td><input type="text" placeholder="-" /></td>
+						<td><input type="text" placeholder="-" /></td>
+					</tr>
+					<tr>
+						<td>Kalkulatorischer Zinssatz (%)</td>
+						<td><input type="text" placeholder="-" value="5,5"/></td>
+						<td><input type="text" placeholder="-" /></td>
+						<td><input type="text" placeholder="-" /></td>
+					</tr>
+					<tr>
+						<td>Nutzungsdauer (Jahre)</td>
+						<td><input type="text" placeholder="-" value="8"/></td>
+						<td><input type="text" placeholder="-" /></td>
+						<td><input type="text" placeholder="-" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</DetailsElement>
+		<hr />
+		<DetailsElement title="Ergebnisse der Berechnung">
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Wahrscheinlichster Fall</th>
+						<th>Best case</th>
+						<th>Worst case</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Investition (€)</td>
+						<td>23000</td>
+						<td>-</td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>Kalkulatorischer Zinssatz (%)</td>
+						<td>5,5</td>
+						<td>-</td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td>Nutzungsdauer (Jahre)</td>
+						<td>8</td>
+						<td>-</td>
+						<td>-</td>
+					</tr>
+				</tbody>
+			</table>
+		</DetailsElement>
+		<hr />
+		<DetailsElement title="Zeitverlauf">
+			<img src="/img/graph.png" alt="Graph" style="align-self: start" />
+		</DetailsElement>
+	</section>
+</div>
+
+<style>
+	td, th {
+		font-size: 13px;
+		color: var(--text);
+		padding: 5px;
+		text-align: right;
+	}
+
+	td:first-of-type {
+		text-align: left;
+	}
+
+	th {
+		font-size: 11px;
+	}
+	input[type="text"] {
+		text-align: right;
+	}
+</style>
