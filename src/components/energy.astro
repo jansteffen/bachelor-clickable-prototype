@@ -24,19 +24,17 @@ import DetailsGrouping from "./detailsGrouping.astro";
 					</DetailsElement>
 					<hr />
 					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
-						<ul>
-							<li>Leistung: 9.200 kWh</li>
-							<li>CO2: 5.336,9 kg</li>
-							<li>Kosten: 1.932 €</li>
-						</ul>
+						<DetailsElement title="Leistung" body=" 9.200 kWh" row output />
+						<DetailsElement title="CO2" body=" 5.336,9 kg" row output />
+						<DetailsElement title="Kosten" body="1.932 €" row output />
 					</DetailsElement>
 				</DetailsGrouping>
 				<DetailsGrouping title="Stadtwerke KA Heizöl">
-					<DetailsElement row	title="Verbrauch bisher (kWh pro Jahr)">
+					<DetailsElement row	title="Verbrauch bisher (Liter pro Jahr)">
 						<input type="number" value="14900" placeholder="0" />
 					</DetailsElement>
 					
-					<DetailsElement row	title="Prognostizierte Einsparung (kWh pro Jahr)">
+					<DetailsElement row	title="Prognostizierte Einsparung (Liter pro Jahr)">
 						<input type="number" value="1200" placeholder="0" class="inputEnergy" name="savings2" />
 					</DetailsElement>
 					<hr />
@@ -50,20 +48,18 @@ import DetailsGrouping from "./detailsGrouping.astro";
 					</DetailsElement>
 					<hr />
 					<DetailsElement title="Berechnete Einsparung (pro Jahr)">
-						<ul>
-							<li>Leistung: 1.200 kWh</li>
-							<li>CO2: 390 kg</li>
-							<li>Kosten: 312 €</li>
-						</ul>
+						<DetailsElement title="Leistung" body="1.200 kWh" row output />
+						<DetailsElement title="CO2" body="390 kg" row output />
+						<DetailsElement title="Kosten" body="312 €" row output />
 					</DetailsElement>
 				</DetailsGrouping>
 		<button class="icon iconPlus" style="align-self: start">Weitere hinzufügen</button>
 	</section>
 	<section class="sidebar">
 		<DetailsGrouping title="Berechnete Einsparung Gesamt (pro Jahr)">
-			<DetailsElement title="Leistung" body="10.400 kWh" row />
-			<DetailsElement title="CO2" body="5.726,9 kg" row />
-			<DetailsElement title="Kosten" body="2.244 €" row />
+			<DetailsElement title="Leistung" body="10.400 kWh" row output />
+			<DetailsElement title="CO2" body="5.726,9 kg" row output />
+			<DetailsElement title="Kosten" body="2.244 €" row output />
 		</DetailsGrouping>
 	</section>
 </div>

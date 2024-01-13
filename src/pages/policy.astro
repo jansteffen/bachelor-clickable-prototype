@@ -45,22 +45,83 @@ import Cost from "../components/cost.astro";
 	}
 	//#endregion
 
-	//#region Form Handling
-	let inputsEnergy = document.getElementsByClassName("inputEnergy");
-	for (let i = 0; i < inputsEnergy.length; i++) {
-		inputsEnergy[i].addEventListener("focusout", parseEnergy);
-		inputsEnergy[i].addEventListener("change", parseEnergy);
+	class savingsGroup {
+		powerToCo2Ratio:number;
+		powerToCostRatio:number;
+		energySavings:number;
+		powerRatio:number;
+		inputElement:HTMLInputElement;
+		outputElement:NodeListOf<Element>;
+
+		constructor(powerToCo2Ratio:number, powerToCostRatio:number, powerRatio:number, groupElement:Element) {
+			this.energySavings = 0;
+			this.powerRatio = powerRatio;
+			this.powerToCo2Ratio = powerToCo2Ratio;
+			this.powerToCostRatio = powerToCostRatio;
+			this.outputElement = groupElement.children[groupElement.children.length - 1].querySelectorAll(".output");
+			this.inputElement = (groupElement.querySelector(".inputEnergy") as HTMLInputElement);
+			this.inputElement.addEventListener("focusout", () => { this.parseEnergy(this.inputElement); parseEnergyTotal();});
+			this.inputElement.addEventListener("change", () => { this.parseEnergy(this.inputElement); parseEnergyTotal();});
+			this.parseEnergy(this.inputElement);
+		}
+
+		parseEnergy(inputElement:HTMLInputElement):void {
+			let newValue = parseFloat(inputElement.value);
+			if(isNaN(newValue)) {
+				return;
+			}
+			this.energySavings = newValue * this.powerRatio;
+			(this.outputElement[0] as HTMLElement).innerText = Math.round(this.energySavings) + " kWh";
+			(this.outputElement[1] as HTMLElement).innerText = Math.round(this.energySavings * this.powerToCo2Ratio) + " kg";
+			(this.outputElement[2] as HTMLElement).innerText = Math.round(this.energySavings * this.powerToCostRatio) + " €";
+		}
+
+		//#region getters
+		get savingsEnergy():number {
+			return this.energySavings;
+		}
+
+		get savingsCo2():number {
+			return this.energySavings * this.powerToCo2Ratio;
+		}
+
+		get savingsCost():number {
+			return this.energySavings * this.powerToCostRatio;
+		}
+		//#endregion
 	}
 
-	function parseEnergy() {
-		let totalEnergy:number = 0;
-		for (let i = 0; i < inputsEnergy.length; i++) {
-			let value = parseFloat((inputsEnergy[i] as HTMLInputElement).value);
-			if (!isNaN(value)) {
-				totalEnergy += value;
-			}
+
+	let inputsEnergy:Array<savingsGroup> = [
+		new savingsGroup(0.5801, 0.21, 1, (document.querySelector("#tabEnergy .main-content .details-grouping:nth-of-type(1)") as Element)),
+		new savingsGroup(0.3251, 0.25, 11.5, (document.querySelector("#tabEnergy .main-content .details-grouping:nth-of-type(2)") as Element))
+	];
+	
+	function parseEnergyTotal():void {
+		let totalEnergySavings:number = 0;
+		let totalMoneySavings:number = 0;
+		let totalCo2Savings:number = 0;
+		for(let i = 0; i < inputsEnergy.length; i++) {
+			totalEnergySavings += inputsEnergy[i].savingsEnergy;
+			totalMoneySavings += inputsEnergy[i].savingsCost;
+			totalCo2Savings += inputsEnergy[i].savingsCo2;
 		}
-		console.log(totalEnergy);
+
+		let outputElements = document.querySelectorAll("#tabEnergy .sidebar .output");
+		(outputElements[0] as HTMLElement).innerText = Math.round(totalEnergySavings) + " kWh";
+		(outputElements[1] as HTMLElement).innerText = Math.round(totalCo2Savings) + " kg";
+		(outputElements[2] as HTMLElement).innerText = Math.round(totalMoneySavings) + " €";
+	}
+	parseEnergyTotal();
+
+	/*let inputsCost = document.getElementsByClassName("inputCost");
+	for (let i = 0; i < inputsCost.length; i++) {
+		inputsCost[i].addEventListener("focusout", parseCost);
+		inputsCost[i].addEventListener("change", parseCost);
+	}*/
+
+	function parseCost():void {
+
 	}
 	//#endregion
 </script>
