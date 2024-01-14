@@ -25,7 +25,7 @@ import DetailsElement from "../components/detailsElement.astro";
 					body="0,21€"
 				/>
 				<DetailsElement row 
-					title="CO2 Ausstoß pro kWh"
+					title="CO₂ Ausstoß pro kWh"
 					body="580,1 g"
 				/>
 				<DetailsElement row
@@ -53,7 +53,7 @@ import DetailsElement from "../components/detailsElement.astro";
 					body="0,26€"
 				/>
 				<DetailsElement row 
-					title="CO2 Ausstoß pro kWh"
+					title="CO₂ Ausstoß pro kWh"
 					body="325,1 g"
 				/>
 				<DetailsElement row
@@ -112,7 +112,8 @@ import DetailsElement from "../components/detailsElement.astro";
 
     .graph {
         flex-grow: 1;
-        background-color: #666;
+        background-color: #fff;
+        background-image: url("img/energietraeger_graph.png");
     }
 
     .values {
@@ -122,6 +123,7 @@ import DetailsElement from "../components/detailsElement.astro";
         justify-content: space-around;
         align-items: stretch;
 		background-color: #f9f9f9;
+        border-left: 1px solid var(--borders);
     }
 
     .values :global(.row > *) {

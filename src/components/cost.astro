@@ -21,16 +21,70 @@ import DetailsElement from "./detailsElement.astro";
 						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
+						<td>Nutzungsdauer</td>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></td></label>
+					</tr>
+					<tr>
 						<td>Kalkulatorischer Zinssatz</td>
 						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
 						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
 						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
-						<td>Nutzungsdauer</td>
-						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></td></label>
-						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></td></label>
-						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></td></label>
+						<td>Erwartete Energiepreissteigerung [e]</td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
+					</tr>
+					<tr>
+						<td>Erwartete sonstige Preissteigerung [p]</td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
+					</tr>
+				</tbody>
+			</table>
+		</DetailsElement>
+		<hr />
+		<DetailsElement title="Ermittlung der Einsparung">
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Kosten</th>
+						<th>CO₂</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<label>
+								<input type="radio" name="energySavingsSource" value="calculated" />
+								Berechnet
+							</label>
+						</td>
+						<td>
+							bla
+						</td>
+						<td>
+							bla
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>
+								<input type="radio" name="energySavingsSource" value="Manual" />
+								Manuelle Eingabe
+							</label>
+						</td>
+						<td>
+							<label data-unit="€" class="unit"><input type="number" placeholder="-" class="inputCost" name="energySavingsSourceManualCost" /></label>
+						</td>
+						<td>
+							<label data-unit="kg" class="unit"><input type="number" placeholder="-" class="inputCost" name="energySavingsSourceManualCo2" /></label>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -48,19 +102,43 @@ import DetailsElement from "./detailsElement.astro";
 				</thead>
 				<tbody>
 					<tr>
-						<td>Amortisationszeit</td>
+						<td>Interne Verzinsung</td>
 						<td class="outputCost likelyCase">23000</td>
 						<td class="outputCost bestCase">-</td>
 						<td class="outputCost worstCase">-</td>
 					</tr>
 					<tr>
-						<td>???</td>
+						<td>Statische Amortisation</td>
 						<td class="outputCost likelyCase">-</td>
 						<td class="outputCost bestCase">-</td>
 						<td class="outputCost worstCase">-</td>
 					</tr>
 					<tr>
-						<td>???</td>
+						<td>Dynamische Amortisation</td>
+						<td class="outputCost likelyCase">-</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
+					</tr>
+					<tr>
+						<td>Kapitalwert nach Laufzeit</td>
+						<td class="outputCost likelyCase">-</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
+					</tr>
+					<tr>
+						<td>Energetische Einsparung</td>
+						<td class="outputCost likelyCase">-</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
+					</tr>
+					<tr>
+						<td>Finanzielle-Einsparung (unverzinst)</td>
+						<td class="outputCost likelyCase">-</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
+					</tr>
+					<tr>
+						<td>CO₂-Einsparung</td>
 						<td class="outputCost likelyCase">-</td>
 						<td class="outputCost bestCase">-</td>
 						<td class="outputCost worstCase">-</td>
