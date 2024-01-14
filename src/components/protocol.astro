@@ -12,11 +12,11 @@ import ProtocolEntry from "./protocolEntry.astro";
 		<DetailsElement title="Neuen Fortschritt protokolieren">
 			<textarea name="comment" rows="3" placeholder="Ergänzen Sie das Protokoll um eine weitere Notiz..."></textarea>
 			<section id="buttons">
-				<label>
+				<label class="unit" data-unit="%">
 					Fortschritt Schätzung:
 					<input type="number" name="progress" placeholder="0" min="10" max="100" value="10" />
 				</label>
-				<button class="icon iconAttachment">Datei anhängen></button>
+				<button class="icon iconAttachment">Datei anhängen</button>
 				<button class="icon iconSave">Speichern</button>
 			</section>
 		</DetailsElement>
@@ -41,19 +41,7 @@ import ProtocolEntry from "./protocolEntry.astro";
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		gap: 20px
-	}
-
-	label {
-		display: flex;
-		flex-direction: row;
-		line-height: 23px;
-		gap: 5px;
-		background-color: #fff;
-		border-radius: 3px;
-		font-size: 14px;
-		padding: 5px 8px;
-		color: var(--text);
+		gap: 10px
 	}
 
 	.progress {
@@ -65,23 +53,22 @@ import ProtocolEntry from "./protocolEntry.astro";
 		background-color: #1ccc5f;
 		border-radius: 100px;
 		font-size: 13px;
-		line-height: 15px;
-		padding: 6px 0px 5px 0px;
+		line-height: 25px;
+		padding-bottom: 1px;
 		text-align: center;
 		color: #fff;
 	}
 
-	input[type="number"] {
-		text-align: left;
-		padding: 0;
-		min-width: 50px;
-		width: 50px;
+	.unit::after {
+		width: 30px;
 	}
 
-	input[type="number"]::after {
-		display: block;
-		color: var(--text);
-		font-size: 14px;
-		content: "%";
+	input[type="number"] {
+		min-width: 70px;
+		width: 70px;
+		padding-right: 38px;
+		margin-left: 10px;
 	}
+
+
 </style>

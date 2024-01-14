@@ -7,7 +7,7 @@ const { title } = Astro.props;
 ---
 
 <section class="details-grouping">
-	<h3>{title}</h3>
+	<h3>{title}<slot name="image" /></h3>
 	<slot />
 </section>
 
@@ -27,9 +27,12 @@ const { title } = Astro.props;
 		font-weight: normal;
 		padding-bottom: 5px;
 		border-bottom: 1px solid var(--borders);
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 	}
 
-	.details-grouping :global(.details-element.row *) {
+	.details-grouping :global(.details-element.row > *) {
 		width: 50%;
 	}
 </style>

@@ -75,14 +75,36 @@ to {
 	min-width: 350px;
 }
 
-/* <labels> act as a container for both their text and their input field so that both can be positioned/aligned as a pair */
 label {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	line-height: 25px;
+	line-height: 29px;
+	position: relative;
 }
 
+.unit {
+	height: 29px;
+	display: inline-block;
+}
+
+.unit input[type="text"], .unit input[type="number"] {
+	text-align: right;
+	width: 100%;
+	padding-right: 53px;
+}
+
+.unit::after {
+	content: attr(data-unit);
+	position: absolute;
+	display: block;
+	font-size: 14px;
+	color: var(--text-light);
+	right: 0;
+	top: 0;
+	width: 45px;
+	line-height: 29px;
+	text-align: center;
+	border-radius: 0 3px 3px 0;
+	background-color: #ddd;
+}
 
 /* Text input fields */
 input[type=text], textarea, input[type=number] {
@@ -152,15 +174,10 @@ button:active, input[type=button]:active {
 }
 
 a, a:visited {
-	color: var(--text-light);
+	color: var(--text);
 	text-decoration: none;
 }
 
 a:hover {
 	text-decoration: underline;
-}
-
-li {
-	list-style-type:circle;
-	margin-left: 20px;
 }

@@ -58,7 +58,7 @@ import Cost from "../components/cost.astro";
 			this.powerRatio = powerRatio;
 			this.powerToCo2Ratio = powerToCo2Ratio;
 			this.powerToCostRatio = powerToCostRatio;
-			this.outputElement = groupElement.children[groupElement.children.length - 1].querySelectorAll(".output");
+			this.outputElement = groupElement.querySelectorAll(".output");
 			this.inputElement = (groupElement.querySelector(".inputEnergy") as HTMLInputElement);
 			this.inputElement.addEventListener("focusout", () => { this.parseEnergy(this.inputElement); parseEnergyTotal();});
 			this.inputElement.addEventListener("change", () => { this.parseEnergy(this.inputElement); parseEnergyTotal();});

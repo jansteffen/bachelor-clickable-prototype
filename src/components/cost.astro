@@ -15,22 +15,22 @@ import DetailsElement from "./detailsElement.astro";
 				</thead>
 				<tbody>
 					<tr>
-						<td>Investition (€)</td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
+						<td>Investition</td>
+						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
-						<td>Kalkulatorischer Zinssatz (%)</td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
+						<td>Kalkulatorischer Zinssatz</td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
-						<td>Nutzungsdauer (Jahre)</td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
-						<td><input type="text" placeholder="-" class="inputCost" /></td>
+						<td>Nutzungsdauer</td>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></td></label>
 					</tr>
 				</tbody>
 			</table>
@@ -48,22 +48,22 @@ import DetailsElement from "./detailsElement.astro";
 				</thead>
 				<tbody>
 					<tr>
-						<td>Investition (€)</td>
-						<td>23000</td>
-						<td>-</td>
-						<td>-</td>
+						<td>Amortisationszeit</td>
+						<td class="outputCost likelyCase">23000</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
 					</tr>
 					<tr>
-						<td>Kalkulatorischer Zinssatz (%)</td>
-						<td>5,5</td>
-						<td>-</td>
-						<td>-</td>
+						<td>???</td>
+						<td class="outputCost likelyCase">-</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
 					</tr>
 					<tr>
-						<td>Nutzungsdauer (Jahre)</td>
-						<td>8</td>
-						<td>-</td>
-						<td>-</td>
+						<td>???</td>
+						<td class="outputCost likelyCase">-</td>
+						<td class="outputCost bestCase">-</td>
+						<td class="outputCost worstCase">-</td>
 					</tr>
 				</tbody>
 			</table>
@@ -81,6 +81,8 @@ import DetailsElement from "./detailsElement.astro";
 		color: var(--text);
 		padding: 5px;
 		text-align: right;
+		width: 25%;
+		font-weight: normal;
 	}
 
 	td:first-of-type {
@@ -90,7 +92,10 @@ import DetailsElement from "./detailsElement.astro";
 	th {
 		font-size: 11px;
 	}
-	input[type="text"] {
+	
+	td input[type="text"] {
 		text-align: right;
+		width: 100%;
+		padding-right: 53px;
 	}
 </style>
