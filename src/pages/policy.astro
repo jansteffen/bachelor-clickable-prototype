@@ -159,6 +159,13 @@ import Cost from "../components/cost.astro";
 		SonstigePreissteigerung: number;
 	}
 
+	type cashflowYear = {
+		savings: number;
+		costs: number;
+	}
+
+	let cashflow:Array<cashflowYear> = [];
+
 	function parseCost():void {
 		let cases:Array<Case> = [];
 		let caseNames = ["likelyCase", "bestCase", "worstCase"];

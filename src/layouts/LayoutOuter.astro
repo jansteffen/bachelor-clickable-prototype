@@ -24,14 +24,31 @@ const { title = "Energiemanagement" } = Astro.props;
 	</head>
 	<body>
 		<article id="main">
+			<div id="nav">
+				<a href="/">Maßnahmen Übersicht</a>
+				<a href="/categories">Energieträger</a>
+			</div>
 			<slot />
 		</article>
 	</body>
 </html>
-<style is:global>
-	:root {
+<style>
+	:global(:root) {
 		--borders: #D0D0D0;
 		--text: #242424;
 		--text-light: #535353;
+	}
+	#nav {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		gap: 2rem;
+		align-items: center;
+		border-bottom: 1px solid var(--borders);
+	}
+	#nav a {
+		color: var(--text);
+		padding: 1rem;
+		padding-top: 0;
 	}
 </style>
