@@ -46,7 +46,7 @@ import Cost from "../components/cost.astro";
 	//#endregion
 
 	function formatOutput(value:number, unit:string):string {
-		if(value == 0) {
+		if(value == 0 || value == Infinity || isNaN(value)) {
 			return "-";
 		}
 		return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " " + unit;
@@ -141,9 +141,13 @@ import Cost from "../components/cost.astro";
 			let input2value = parseFloat(input2.value);
 			if(input1 !== null && !isNaN(input1value)) {
 				values[0] = input1value;
+			} else {
+				values[0] = 0;	
 			}
 			if(input2 !== null && !isNaN(input2value)) {
 				values[1] = input2value;
+			} else {
+				values[1] = 0;	
 			}
 			return values;
 		}
@@ -182,17 +186,31 @@ import Cost from "../components/cost.astro";
 			cases.push(newCase);
 			let moneySavings, Co2Savings;
 			[moneySavings, Co2Savings] = getSavings();
-			let outputElements = document.querySelectorAll("#tabCost .main-content .outputCost." + caseName);
-
 			
+
+			// e17 / (1 + c2) ^ e7
+			// gesamt / ( 1+ kalkulatorischer zinssatz) ^ Jahreszahl
+			/*cashflow = [];
+			for(let i = 0; i < newCase.Nutzungsdauer; i++) {
+				let newCashflow:cashflowYear = {
+					savings: moneySavings,
+					costs: 0
+				};
+				moneySavings *= (1 + newCase.Energiepreissteigerung);
+				newCase.Investition *= (1 + newCase.SonstigePreissteigerung);
+				cashflow.push(newCashflow);
+			}*/
+			
+			
+			let outputElements = document.querySelectorAll("#tabCost .main-content .outputCost." + caseName);
 			// interne verzinsung ???
-			(outputElements[0] as HTMLElement).innerText = formatOutput(newCase.Zinssatz, "%");
+			(outputElements[0] as HTMLElement).innerText = "TODO"; //formatOutput(newCase.Zinssatz, "%");
 			// statische amortisationszeit ???
-			(outputElements[1] as HTMLElement).innerText = formatOutput(newCase.Investition / moneySavings, "Jahre");
+			(outputElements[1] as HTMLElement).innerText = (newCase.Investition / moneySavings) !== 0 ?  (newCase.Investition / moneySavings).toFixed(1).replace(".",",") + " Jahre" : "-";
 			// dynamische amortisationszeit ???
-			(outputElements[2] as HTMLElement).innerText = formatOutput(newCase.Investition / moneySavings, "Jahre");
+			(outputElements[2] as HTMLElement).innerText = "TODO"; //formatOutput(newCase.Investition / moneySavings, "Jahre");
 			// kapitalwert nach laufzeit ???
-			(outputElements[3] as HTMLElement).innerText = formatOutput((moneySavings * newCase.Nutzungsdauer) - newCase.Investition, "€");
+			(outputElements[3] as HTMLElement).innerText = "TODO"; //formatOutput((moneySavings * newCase.Nutzungsdauer) - newCase.Investition, "€");
 			// energetische einsparung
 			(outputElements[4] as HTMLElement).innerText = formatOutput(totalEnergySavings * newCase.Nutzungsdauer, "kWh");
 			// finanzielle einsparung
