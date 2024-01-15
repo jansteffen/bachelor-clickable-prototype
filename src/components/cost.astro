@@ -53,8 +53,8 @@ import DetailsElement from "./detailsElement.astro";
 				<thead>
 					<tr>
 						<th></th>
-						<th>Kosten</th>
-						<th>CO₂</th>
+						<th>Kosten (pro Jahr)</th>
+						<th>CO₂ (pro Jahr)</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,25 +65,25 @@ import DetailsElement from "./detailsElement.astro";
 								Berechnet
 							</label>
 						</td>
-						<td>
+						<td class="outputEnergy">
 							bla
 						</td>
-						<td>
+						<td class="outputEnergy">
 							bla
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<label>
-								<input type="radio" name="energySavingsSource" value="Manual" />
+								<input type="radio" name="energySavingsSource" value="manual" checked />
 								Manuelle Eingabe
 							</label>
 						</td>
 						<td>
-							<label data-unit="€" class="unit"><input type="number" placeholder="-" class="inputCost" name="energySavingsSourceManualCost" /></label>
+							<label data-unit="€" class="unit"><input type="number" placeholder="-" class="inputCost" id="energySavingsSourceManualCost" /></label>
 						</td>
 						<td>
-							<label data-unit="kg" class="unit"><input type="number" placeholder="-" class="inputCost" name="energySavingsSourceManualCo2" /></label>
+							<label data-unit="kg" class="unit"><input type="number" placeholder="-" class="inputCost" id="energySavingsSourceManualCo2" /></label>
 						</td>
 					</tr>
 				</tbody>

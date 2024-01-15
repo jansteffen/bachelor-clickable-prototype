@@ -45,6 +45,13 @@ import Cost from "../components/cost.astro";
 	}
 	//#endregion
 
+	function formatOutput(value:number, unit:string):string {
+		if(value == 0) {
+			return "-";
+		}
+		return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " " + unit;
+	}
+
 	class savingsGroup {
 		powerToCo2Ratio:number;
 		powerToCostRatio:number;
@@ -71,9 +78,9 @@ import Cost from "../components/cost.astro";
 				return;
 			}
 			this.energySavings = newValue * this.powerRatio;
-			(this.outputElement[0] as HTMLElement).innerText = Math.round(this.energySavings) + " kWh";
-			(this.outputElement[1] as HTMLElement).innerText = Math.round(this.energySavings * this.powerToCo2Ratio) + " kg";
-			(this.outputElement[2] as HTMLElement).innerText = Math.round(this.energySavings * this.powerToCostRatio) + " €";
+			(this.outputElement[0] as HTMLElement).innerText = formatOutput(this.energySavings, "kWh");
+			(this.outputElement[1] as HTMLElement).innerText = formatOutput(this.energySavings * this.powerToCo2Ratio, "kg");
+			(this.outputElement[2] as HTMLElement).innerText = formatOutput(this.energySavings * this.powerToCostRatio, "€");
 		}
 
 		//#region getters
@@ -97,32 +104,108 @@ import Cost from "../components/cost.astro";
 		new savingsGroup(0.3251, 0.25, 11.5, (document.querySelector("#tabEnergy .main-content .details-grouping:nth-of-type(2)") as Element))
 	];
 	
+	let totalEnergySavings:number = 0;
+	let totalMoneySavings:number = 0;
+	let totalCo2Savings:number = 0;
 	function parseEnergyTotal():void {
-		let totalEnergySavings:number = 0;
-		let totalMoneySavings:number = 0;
-		let totalCo2Savings:number = 0;
+		totalEnergySavings = 0;
+		totalMoneySavings = 0;
+		totalCo2Savings = 0;
 		for(let i = 0; i < inputsEnergy.length; i++) {
 			totalEnergySavings += inputsEnergy[i].savingsEnergy;
 			totalMoneySavings += inputsEnergy[i].savingsCost;
 			totalCo2Savings += inputsEnergy[i].savingsCo2;
 		}
 
+		// energy tab
 		let outputElements = document.querySelectorAll("#tabEnergy .sidebar .output");
-		(outputElements[0] as HTMLElement).innerText = Math.round(totalEnergySavings) + " kWh";
-		(outputElements[1] as HTMLElement).innerText = Math.round(totalCo2Savings) + " kg";
-		(outputElements[2] as HTMLElement).innerText = Math.round(totalMoneySavings) + " €";
+		(outputElements[0] as HTMLElement).innerText = formatOutput(totalEnergySavings, "kWh");
+		(outputElements[1] as HTMLElement).innerText = formatOutput(totalCo2Savings, "kg");
+		(outputElements[2] as HTMLElement).innerText = formatOutput(totalMoneySavings, "€");
+
+		// cost tab
+		outputElements = document.querySelectorAll("#tabCost .main-content .outputEnergy");
+		(outputElements[0] as HTMLElement).innerText = formatOutput(totalMoneySavings, "€");
+		(outputElements[1] as HTMLElement).innerText = formatOutput(totalCo2Savings, "kg");
 	}
 	parseEnergyTotal();
 
-	/*let inputsCost = document.getElementsByClassName("inputCost");
+	// der switch zwischen manuelle eingabe und berechnete eingabe
+	function getSavings():Array<number> {
+		let radio = document.querySelector("#tabCost .main-content input[type='radio']:checked") as HTMLInputElement;
+		if(radio !== null && radio.value == "manual") {
+			let values = [0, 0];
+			let input1 = document.querySelector("#energySavingsSourceManualCost") as HTMLInputElement;
+			let input1value = parseFloat(input1.value);
+			let input2 = document.querySelector("#energySavingsSourceManualCo2") as HTMLInputElement;
+			let input2value = parseFloat(input2.value);
+			if(input1 !== null && !isNaN(input1value)) {
+				values[0] = input1value;
+			}
+			if(input2 !== null && !isNaN(input2value)) {
+				values[1] = input2value;
+			}
+			return values;
+		}
+		return [totalMoneySavings, totalCo2Savings];
+	}
+
+	type Case = {
+		Name: string;
+		Investition: number;
+		Nutzungsdauer: number;
+		Zinssatz: number;
+		Energiepreissteigerung: number;
+		SonstigePreissteigerung: number;
+	}
+
+	function parseCost():void {
+		let cases:Array<Case> = [];
+		let caseNames = ["likelyCase", "bestCase", "worstCase"];
+		caseNames.forEach(caseName => {
+			let inputsCase = document.querySelectorAll("#tabCost .main-content .inputCost." + caseName );
+			let newCase:Case = {
+				Name: caseName,
+				Investition: parseFloat((inputsCase[0] as HTMLInputElement).value.replaceAll(",",".")) || 0,
+				Nutzungsdauer: parseFloat((inputsCase[1] as HTMLInputElement).value.replaceAll(",",".")) || 0,
+				Zinssatz: parseFloat((inputsCase[2] as HTMLInputElement).value.replaceAll(",",".")) || 0,
+				Energiepreissteigerung: parseFloat((inputsCase[3] as HTMLInputElement).value.replaceAll(",",".")) || 0,
+				SonstigePreissteigerung: parseFloat((inputsCase[4] as HTMLInputElement).value.replaceAll(",",".")) || 0
+			};
+			cases.push(newCase);
+			let moneySavings, Co2Savings;
+			[moneySavings, Co2Savings] = getSavings();
+			let outputElements = document.querySelectorAll("#tabCost .main-content .outputCost." + caseName);
+
+			
+			// interne verzinsung ???
+			(outputElements[0] as HTMLElement).innerText = formatOutput(newCase.Zinssatz, "%");
+			// statische amortisationszeit ???
+			(outputElements[1] as HTMLElement).innerText = formatOutput(newCase.Investition / moneySavings, "Jahre");
+			// dynamische amortisationszeit ???
+			(outputElements[2] as HTMLElement).innerText = formatOutput(newCase.Investition / moneySavings, "Jahre");
+			// kapitalwert nach laufzeit ???
+			(outputElements[3] as HTMLElement).innerText = formatOutput((moneySavings * newCase.Nutzungsdauer) - newCase.Investition, "€");
+			// energetische einsparung
+			(outputElements[4] as HTMLElement).innerText = formatOutput(totalEnergySavings * newCase.Nutzungsdauer, "kWh");
+			// finanzielle einsparung
+			(outputElements[5] as HTMLElement).innerText = formatOutput(moneySavings * newCase.Nutzungsdauer, "€");
+			// co2 einsparung
+			(outputElements[6] as HTMLElement).innerText = formatOutput(Co2Savings * newCase.Nutzungsdauer, "kg");
+
+		});
+	}
+
+	let inputsCost = document.querySelectorAll("#tabCost .main-content .inputCost");
 	for (let i = 0; i < inputsCost.length; i++) {
 		inputsCost[i].addEventListener("focusout", parseCost);
 		inputsCost[i].addEventListener("change", parseCost);
-	}*/
-
-	function parseCost():void {
-
 	}
+	let inputsRadio = document.querySelectorAll("#tabCost .main-content input[type='radio']");
+	for (let i = 0; i < inputsRadio.length; i++) {
+		inputsRadio[i].addEventListener("input", parseCost);
+	}
+	parseCost();
 	//#endregion
 </script>
 
