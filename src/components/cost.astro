@@ -16,33 +16,33 @@ import DetailsElement from "./detailsElement.astro";
 				<tbody>
 					<tr>
 						<td>Investition</td>
-						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
-						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
-						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
+						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" tabindex="1" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" tabindex="6" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="€" class="unit"><input type="text" placeholder="-" tabindex="11" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
 						<td>Nutzungsdauer</td>
-						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></td></label>
-						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></td></label>
-						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" tabindex="2" class="inputCost likelyCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" tabindex="7" class="inputCost bestCase" /></td></label>
+						<td><label data-unit="Jahre" class="unit"><input type="text" placeholder="-" tabindex="12" class="inputCost worstCase" /></td></label>
 					</tr>
 					<tr>
 						<td>Kalkulatorischer Zinssatz</td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="3" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="8" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="13" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
 						<td>Erwartete Energiepreissteigerung [e]</td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="4" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="9" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="14" class="inputCost worstCase" /></label></td>
 					</tr>
 					<tr>
 						<td>Erwartete sonstige Preissteigerung [p]</td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost likelyCase" /></label></td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost bestCase" /></label></td>
-						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" class="inputCost worstCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="5" class="inputCost likelyCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="10" class="inputCost bestCase" /></label></td>
+						<td><label data-unit="%" class="unit"><input type="text" placeholder="-" tabindex="15" class="inputCost worstCase" /></label></td>
 					</tr>
 				</tbody>
 			</table>
@@ -90,21 +90,28 @@ import DetailsElement from "./detailsElement.astro";
 			</table>
 		</DetailsElement>
 		<hr />
+		<DetailsElement title="Zusätzliche Einsparungs-/Kostenfaktoren">
+			<button class="icon iconPlus" id="buttonAddNewFactor">Neuen Faktor hinzufügen</button>
+		</DetailsElement>
+		<hr />
 		<DetailsElement title="Cashflow Tabelle">
-			<table>
+			<table id="cashflowOutputTable">
 				<thead>
 					<tr>
 						<th>Jahr</th>
-						<th>Cashflow nicht abgezinst</th>
+						<th>Cashflow (nicht abgezinst)</th>
 						<th>Cashflow abgezinst [e] [p]</th>
-						<th>kumuliert</th>
+						<th>Kumuliert</th>
 					</tr>
 				</thead>
-				<tbody id="cashflowOutputTable">
-
+				<tbody>
+					<tr>
+						<td colspan="4">Geben Sie Investition, Nutzungsdauer und kalkulatorischer Zins an um die Berechnung zu starten.</td>
+					</tr>
 				</tbody>
 			</table>
 		</DetailsElement>
+		<hr />
 		<DetailsElement title="Ergebnisse der Berechnung">
 			<table class="basicTable">
 				<thead>
@@ -162,7 +169,7 @@ import DetailsElement from "./detailsElement.astro";
 			</table>
 		</DetailsElement>
 		<hr />
-		<DetailsElement title="Zeitverlauf (TODO)">
+		<DetailsElement title="Zeitverlauf">
 			<img src="/img/graph.png" alt="Graph" style="align-self: start" />
 		</DetailsElement>
 	</section>
@@ -192,22 +199,32 @@ import DetailsElement from "./detailsElement.astro";
 		padding-right: 53px;
 	}
 
-	#cashflowOutputTable :global(td, th) {
+	#cashflowOutputTable {
+		border-collapse: collapse;
+	}
+
+	:global(#cashflowOutputTable td, #cashflowOutputTable th) {
 		font-size: 13px;
+		line-height: 2;
 		color: var(--text);
 		padding: 5px 10px;
 		text-align: center;
 		font-weight: normal;
-		border: 1px solid var(--border);
+		border: 1px solid var(--borders);
 	}
 
-	#cashflowOutputTable :global(td:first-of-type, th:first-of-type) {
+	:global(#cashflowOutputTable td:first-of-type, #cashflowOutputTable th:first-of-type) {
 		text-align: center;
 		min-width: 20px;
 		width: 20px;
 	}
 
 	#cashflowOutputTable :global(tr td section) {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	:global(.extraSavingsFactor) {
 		display: flex;
 		justify-content: space-between;
 	}

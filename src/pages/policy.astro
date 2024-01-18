@@ -52,6 +52,14 @@ import Cost from "../components/cost.astro";
 		return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " " + unit;
 	}
 
+	function parseInput(inputElement:Element):number {
+		let newValue = parseFloat((inputElement as HTMLInputElement).value.replaceAll(",","."));
+		if(isNaN(newValue)) {
+			return 0;
+		}
+		return newValue;
+	}
+
 	//#region Energy Tab
 	class savingsGroup {
 		powerToCo2Ratio:number;
@@ -157,10 +165,66 @@ import Cost from "../components/cost.astro";
 		return [totalMoneySavings, totalCo2Savings];
 	}
 
+	class extraSavingsFactor {
+		amountInput:HTMLInputElement;
+		typeInput:HTMLSelectElement;
+		nameInput:HTMLInputElement;
+		container: HTMLElement;
+		constructor(referenceNode:HTMLElement) {
+			this.container = document.createElement("section");
+			this.container.classList.add("extraSavingsFactor");
+
+			this.nameInput = document.createElement("input") as HTMLInputElement;
+			this.nameInput.type = "text";
+			this.nameInput.placeholder = "Bezeichnung";
+			this.nameInput.addEventListener("focusout", () => { parseCost();});
+			this.nameInput.addEventListener("change", () => {  parseCost();});
+			this.container.appendChild(this.nameInput);
+
+			let unitWrapper = document.createElement("label");
+			unitWrapper.setAttribute("data-unit", "€");
+			unitWrapper.classList.add("unit");
+			this.amountInput = document.createElement("input") as HTMLInputElement;
+			this.amountInput.type = "number";
+			this.amountInput.addEventListener("focusout", () => { parseCost();});
+			this.amountInput.addEventListener("change", () => { parseCost();});
+			unitWrapper.appendChild(this.amountInput);
+			this.container.appendChild(unitWrapper);
+
+			this.typeInput = document.createElement("select") as HTMLSelectElement;
+			this.typeInput.innerHTML = "<option value='1'>Energie</option><option value='2' selected='selected'>Sonstige</option><option value='3'>Unverzinst</option>";
+			this.typeInput.addEventListener("input", () => { parseCost();});
+			this.container.appendChild(this.typeInput);
+			referenceNode.parentElement?.insertBefore(this.container, referenceNode);
+		}
+
+		get savings():cashflow | null {
+			if(this.amountInput.valueAsNumber === 0 || isNaN(this.amountInput.valueAsNumber) || this.nameInput.value === "" || this.typeInput.value === "") {
+				return null;
+			}
+			return {
+				savings: this.amountInput.valueAsNumber,
+				name: this.nameInput.value,
+				type: parseInt(this.typeInput.value)
+			};
+		}
+	}
+
+	let extraSavingsFactors:Array<extraSavingsFactor> = [];
+	function addNewSavingsFactor() {
+		let parent = document.querySelector("#buttonAddNewFactor")
+		if (parent === null) {
+			return;
+		} else {
+			extraSavingsFactors.push(new extraSavingsFactor((parent as HTMLElement)));
+		}
+	}
+	document.querySelector("#buttonAddNewFactor")?.addEventListener("click", addNewSavingsFactor);
+
 	enum cashflowType {
-		energy,
-		other,
-		noInterest
+		energy = 1,
+		other = 2,
+		noInterest = 3
 	}
 
 	type cashflow = {
@@ -185,11 +249,11 @@ import Cost from "../components/cost.astro";
 			let inputsCase = document.querySelectorAll("#tabCost .main-content .inputCost." + caseName );
 			let newCase:Case = {
 				Name: caseName,
-				Investition: parseFloat((inputsCase[0] as HTMLInputElement).value.replaceAll(",",".")) || 0,
-				Nutzungsdauer: parseFloat((inputsCase[1] as HTMLInputElement).value.replaceAll(",",".")) || 0,
-				Zinssatz: parseFloat((inputsCase[2] as HTMLInputElement).value.replaceAll(",",".")) || 0,
-				Energiepreissteigerung: parseFloat((inputsCase[3] as HTMLInputElement).value.replaceAll(",",".")) || 0,
-				SonstigePreissteigerung: parseFloat((inputsCase[4] as HTMLInputElement).value.replaceAll(",",".")) || 0
+				Investition: parseInput(inputsCase[0]),
+				Nutzungsdauer: parseInput(inputsCase[1]),
+				Zinssatz: parseInput(inputsCase[2]),
+				Energiepreissteigerung: parseInput(inputsCase[3]),
+				SonstigePreissteigerung: parseInput(inputsCase[4])
 			};
 			//cases.push(newCase);
 			let moneySavings, Co2Savings;
@@ -197,10 +261,10 @@ import Cost from "../components/cost.astro";
 			
 			// Cashflow Tabelle
 			if(caseName === "likelyCase" && newCase.Investition !== 0 && newCase.Nutzungsdauer !== 0 && newCase.Zinssatz !== 0) {
-				let cashflowTable = document.getElementById("cashflowOutputTable") as HTMLTableElement;
+				let cashflowTable = document.querySelector("#cashflowOutputTable tbody") as HTMLTableElement;
 				cashflowTable.innerHTML = "";
 				let cumulative:number = 0;
-				for (let i = 0; i < newCase.Nutzungsdauer; i++) {
+				for (let i = 0; i < newCase.Nutzungsdauer + 1; i++) {
 					let cashflowTableRow = document.createElement("tr");
 
 					// Jahr
@@ -225,20 +289,65 @@ import Cost from "../components/cost.astro";
 							name: "Energieeinsparung",
 							type: cashflowType.energy
 						});
-						newCashflowYear.push({
-							savings: 250,
-							name: "geringere Wartungskosten",
-							type: cashflowType.other
-						});
+						for(let j = 0; j < extraSavingsFactors.length; j++) {
+							if(extraSavingsFactors[j].savings !== null) {
+								newCashflowYear.push(extraSavingsFactors[j].savings as cashflow);
+							}
+						}
+						//newCashflowYear.push({
+						//	savings: 250,
+						//	name: "geringere Wartungskosten",
+						//	type: cashflowType.other
+						//});
 					}
 
 					// Cashflows in Tabelle eintragen
 					newCell = document.createElement("td");
+					let thisYearsTotal = 0;
 					for (let j = 0; j < newCashflowYear.length; j++) {
-						cumulative += newCashflowYear[j].savings;
-						newCell.innerHTML += "<section><span>" + newCashflowYear[j].name + ":</span><span>" +  formatOutput(newCashflowYear[j].savings, "€") + "</span></section>\n";
+						thisYearsTotal += newCashflowYear[j].savings;
+						newCell.innerHTML += "<section><span>"
+							+ newCashflowYear[j].name 
+							+ ":</span><span>" 
+							+  formatOutput(newCashflowYear[j].savings, "€") 
+							+ "</span></section>\n";
 					}
+					newCell.innerHTML += "<hr />";
+					newCell.innerHTML += "<section><span>Gesamt:</span><span>" 
+						+ formatOutput(thisYearsTotal, "€") 
+						+ "</span></section>\n";
 					cashflowTableRow.appendChild(newCell);
+					
+
+					// Abgezinster Cashflow
+					newCell = document.createElement("td");
+					thisYearsTotal = 0;
+					for (let j = 0; j < newCashflowYear.length; j++) {
+						let valueWithInterest = 0;
+						switch(newCashflowYear[j].type) {
+							case cashflowType.energy:
+								valueWithInterest = newCashflowYear[j].savings * Math.pow(1 + (newCase.Energiepreissteigerung / 100), i);
+								break;
+							case cashflowType.other:
+							 valueWithInterest = newCashflowYear[j].savings * Math.pow(1 + (newCase.SonstigePreissteigerung / 100), i);
+								break;
+							case cashflowType.noInterest:
+								valueWithInterest = newCashflowYear[j].savings;
+								break;
+						}
+						thisYearsTotal += valueWithInterest;
+						newCell.innerHTML += "<section><span>"
+							+ newCashflowYear[j].name 
+							+ ":</span><span>" 
+							+  formatOutput(valueWithInterest, "€") 
+							+ "</span></section>\n";
+					}
+					newCell.innerHTML += "<hr />";
+					newCell.innerHTML += "<section><span>Gesamt:</span><span>" 
+						+ formatOutput(thisYearsTotal, "€") 
+						+ "</span></section>\n";
+					cashflowTableRow.appendChild(newCell);
+					cumulative += thisYearsTotal;
 
 					// Kumulativer Cashflow
 					newCell = document.createElement("td");
