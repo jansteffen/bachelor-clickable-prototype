@@ -81,7 +81,7 @@ label {
 }
 
 .unit {
-	height: 29px;
+	height: 30px;
 	display: inline-block;
 }
 
@@ -100,7 +100,7 @@ label {
 	right: 0;
 	top: 0;
 	width: 45px;
-	line-height: 29px;
+	line-height: 30px;
 	text-align: center;
 	border-radius: 0 3px 3px 0;
 	background-color: #ddd;

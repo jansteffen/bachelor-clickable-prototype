@@ -52,6 +52,7 @@ import Cost from "../components/cost.astro";
 		return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " " + unit;
 	}
 
+	//#region Energy Tab
 	class savingsGroup {
 		powerToCo2Ratio:number;
 		powerToCostRatio:number;
@@ -129,7 +130,9 @@ import Cost from "../components/cost.astro";
 		(outputElements[1] as HTMLElement).innerText = formatOutput(totalCo2Savings, "kg");
 	}
 	parseEnergyTotal();
+	//#endregion
 
+	//#region Cost Tab
 	// der switch zwischen manuelle eingabe und berechnete eingabe
 	function getSavings():Array<number> {
 		let radio = document.querySelector("#tabCost .main-content input[type='radio']:checked") as HTMLInputElement;
@@ -154,6 +157,18 @@ import Cost from "../components/cost.astro";
 		return [totalMoneySavings, totalCo2Savings];
 	}
 
+	enum cashflowType {
+		energy,
+		other,
+		noInterest
+	}
+
+	type cashflow = {
+		savings: number;
+		name: string;
+		type: cashflowType;
+	}
+
 	type Case = {
 		Name: string;
 		Investition: number;
@@ -163,15 +178,8 @@ import Cost from "../components/cost.astro";
 		SonstigePreissteigerung: number;
 	}
 
-	type cashflowYear = {
-		savings: number;
-		costs: number;
-	}
-
-	let cashflow:Array<cashflowYear> = [];
-
 	function parseCost():void {
-		let cases:Array<Case> = [];
+		//let cases:Array<Case> = [];
 		let caseNames = ["likelyCase", "bestCase", "worstCase"];
 		caseNames.forEach(caseName => {
 			let inputsCase = document.querySelectorAll("#tabCost .main-content .inputCost." + caseName );
@@ -183,25 +191,69 @@ import Cost from "../components/cost.astro";
 				Energiepreissteigerung: parseFloat((inputsCase[3] as HTMLInputElement).value.replaceAll(",",".")) || 0,
 				SonstigePreissteigerung: parseFloat((inputsCase[4] as HTMLInputElement).value.replaceAll(",",".")) || 0
 			};
-			cases.push(newCase);
+			//cases.push(newCase);
 			let moneySavings, Co2Savings;
 			[moneySavings, Co2Savings] = getSavings();
 			
+			// Cashflow Tabelle
+			if(caseName === "likelyCase" && newCase.Investition !== 0 && newCase.Nutzungsdauer !== 0 && newCase.Zinssatz !== 0) {
+				let cashflowTable = document.getElementById("cashflowOutputTable") as HTMLTableElement;
+				cashflowTable.innerHTML = "";
+				let cumulative:number = 0;
+				for (let i = 0; i < newCase.Nutzungsdauer; i++) {
+					let cashflowTableRow = document.createElement("tr");
 
-			// e17 / (1 + c2) ^ e7
-			// gesamt / ( 1+ kalkulatorischer zinssatz) ^ Jahreszahl
-			/*cashflow = [];
-			for(let i = 0; i < newCase.Nutzungsdauer; i++) {
-				let newCashflow:cashflowYear = {
-					savings: moneySavings,
-					costs: 0
-				};
-				moneySavings *= (1 + newCase.Energiepreissteigerung);
-				newCase.Investition *= (1 + newCase.SonstigePreissteigerung);
-				cashflow.push(newCashflow);
-			}*/
+					// Jahr
+					let newCell = document.createElement("td");
+					newCell.innerText = i.toString();
+					cashflowTableRow.appendChild(newCell);
+
+					let newCashflowYear:Array<cashflow> = [];
+
+					// Cashflows für das Jahr erstellen
+					if (i == 0) {
+						// Investitionsjahr
+						newCashflowYear.push({
+							savings: -newCase.Investition,
+							name: "Investition",
+							type: cashflowType.noInterest	
+						});
+					} else {
+						// Folgejahre mit Zinsen
+						newCashflowYear.push({
+							savings: moneySavings,
+							name: "Energieeinsparung",
+							type: cashflowType.energy
+						});
+						newCashflowYear.push({
+							savings: 250,
+							name: "geringere Wartungskosten",
+							type: cashflowType.other
+						});
+					}
+
+					// Cashflows in Tabelle eintragen
+					newCell = document.createElement("td");
+					for (let j = 0; j < newCashflowYear.length; j++) {
+						cumulative += newCashflowYear[j].savings;
+						newCell.innerHTML += "<section><span>" + newCashflowYear[j].name + ":</span><span>" +  formatOutput(newCashflowYear[j].savings, "€") + "</span></section>\n";
+					}
+					cashflowTableRow.appendChild(newCell);
+
+					// Kumulativer Cashflow
+					newCell = document.createElement("td");
+					newCell.innerText = formatOutput(cumulative, "€");
+					cashflowTableRow.appendChild(newCell);
+
+					// Reihe einfügen
+					cashflowTable.appendChild(cashflowTableRow);
+				}
+			}
+
+
+			// gesamt / ( 1+ kalkulatorischer zinssatz) ^ Jahreszahl			
 			
-			
+			// Ergebniss Tabelle
 			let outputElements = document.querySelectorAll("#tabCost .main-content .outputCost." + caseName);
 			// interne verzinsung ???
 			(outputElements[0] as HTMLElement).innerText = "TODO"; //formatOutput(newCase.Zinssatz, "%");
@@ -221,6 +273,7 @@ import Cost from "../components/cost.astro";
 		});
 	}
 
+	// Event Listener für die Eingabefelder
 	let inputsCost = document.querySelectorAll("#tabCost .main-content .inputCost");
 	for (let i = 0; i < inputsCost.length; i++) {
 		inputsCost[i].addEventListener("focusout", parseCost);
