@@ -170,17 +170,21 @@ import Cost from "../components/cost.astro";
 		typeInput:HTMLSelectElement;
 		nameInput:HTMLInputElement;
 		container: HTMLElement;
-		constructor(referenceNode:HTMLElement) {
-			this.container = document.createElement("section");
+		constructor() {
+			this.container = document.createElement("tr");
 			this.container.classList.add("extraSavingsFactor");
+
+			let newCell = document.createElement("td");
 
 			this.nameInput = document.createElement("input") as HTMLInputElement;
 			this.nameInput.type = "text";
 			this.nameInput.placeholder = "Bezeichnung";
 			this.nameInput.addEventListener("focusout", () => { parseCost();});
 			this.nameInput.addEventListener("change", () => {  parseCost();});
-			this.container.appendChild(this.nameInput);
+			newCell.appendChild(this.nameInput);
+			this.container.appendChild(newCell);
 
+			newCell = document.createElement("td");
 			let unitWrapper = document.createElement("label");
 			unitWrapper.setAttribute("data-unit", "€");
 			unitWrapper.classList.add("unit");
@@ -189,13 +193,24 @@ import Cost from "../components/cost.astro";
 			this.amountInput.addEventListener("focusout", () => { parseCost();});
 			this.amountInput.addEventListener("change", () => { parseCost();});
 			unitWrapper.appendChild(this.amountInput);
-			this.container.appendChild(unitWrapper);
+			newCell.appendChild(unitWrapper);
+			this.container.appendChild(newCell);
 
+			newCell = document.createElement("td");
 			this.typeInput = document.createElement("select") as HTMLSelectElement;
 			this.typeInput.innerHTML = "<option value='1'>Energie</option><option value='2' selected='selected'>Sonstige</option><option value='3'>Unverzinst</option>";
 			this.typeInput.addEventListener("input", () => { parseCost();});
-			this.container.appendChild(this.typeInput);
-			referenceNode.parentElement?.insertBefore(this.container, referenceNode);
+			newCell.appendChild(this.typeInput);
+			this.container.appendChild(newCell);
+
+			newCell = document.createElement("td");
+			newCell.innerHTML = "<button class='icon iconTrash'>Löschen</button>";
+			newCell.querySelector("button")?.addEventListener("click", () => {
+				destroyExtraSavingsFactor(this);
+			});
+			this.container.appendChild(newCell);
+			document.getElementById("extraFactorsTable")?.querySelector("tbody")?.appendChild(this.container);
+			document.getElementById("extraFactorsTable")?.classList.remove("hidden");
 		}
 
 		get savings():cashflow | null {
@@ -211,15 +226,18 @@ import Cost from "../components/cost.astro";
 	}
 
 	let extraSavingsFactors:Array<extraSavingsFactor> = [];
-	function addNewSavingsFactor() {
-		let parent = document.querySelector("#buttonAddNewFactor")
-		if (parent === null) {
-			return;
-		} else {
-			extraSavingsFactors.push(new extraSavingsFactor((parent as HTMLElement)));
+	document.querySelector("#buttonAddNewFactor")?.addEventListener("click", () => {
+		extraSavingsFactors.push(new extraSavingsFactor());
+	});
+
+	function destroyExtraSavingsFactor(reference:extraSavingsFactor) {
+		let index = extraSavingsFactors.indexOf(reference);
+		if(index > -1) {
+			reference.container.remove();
+			extraSavingsFactors.splice(index, 1);
+			parseCost();
 		}
 	}
-	document.querySelector("#buttonAddNewFactor")?.addEventListener("click", addNewSavingsFactor);
 
 	enum cashflowType {
 		energy = 1,
@@ -259,11 +277,15 @@ import Cost from "../components/cost.astro";
 			let moneySavings, Co2Savings;
 			[moneySavings, Co2Savings] = getSavings();
 			
+			let statischeAmortisation:number = -1;
+			let dynamischeAmortisation:number = -1;
+
 			// Cashflow Tabelle
 			if(caseName === "likelyCase" && newCase.Investition !== 0 && newCase.Nutzungsdauer !== 0 && newCase.Zinssatz !== 0) {
 				let cashflowTable = document.querySelector("#cashflowOutputTable tbody") as HTMLTableElement;
 				cashflowTable.innerHTML = "";
 				let cumulative:number = 0;
+				let cumulativeNetPresentValue = 0;
 				for (let i = 0; i < newCase.Nutzungsdauer + 1; i++) {
 					let cashflowTableRow = document.createElement("tr");
 
@@ -294,11 +316,6 @@ import Cost from "../components/cost.astro";
 								newCashflowYear.push(extraSavingsFactors[j].savings as cashflow);
 							}
 						}
-						//newCashflowYear.push({
-						//	savings: 250,
-						//	name: "geringere Wartungskosten",
-						//	type: cashflowType.other
-						//});
 					}
 
 					// Cashflows in Tabelle eintragen
@@ -318,7 +335,6 @@ import Cost from "../components/cost.astro";
 						+ "</span></section>\n";
 					cashflowTableRow.appendChild(newCell);
 					
-
 					// Abgezinster Cashflow
 					newCell = document.createElement("td");
 					thisYearsTotal = 0;
@@ -348,11 +364,19 @@ import Cost from "../components/cost.astro";
 						+ "</span></section>\n";
 					cashflowTableRow.appendChild(newCell);
 					cumulative += thisYearsTotal;
+					cumulativeNetPresentValue += thisYearsTotal / Math.pow(1 + (newCase.Zinssatz / 100), i);
 
 					// Kumulativer Cashflow
 					newCell = document.createElement("td");
 					newCell.innerText = formatOutput(cumulative, "€");
 					cashflowTableRow.appendChild(newCell);
+
+
+					// Dynamische Amortisation
+					if(cumulativeNetPresentValue > 0 && dynamischeAmortisation === -1) {
+						console.log("break even point erreicht im Jahr " + i);
+						dynamischeAmortisation = i - (cumulativeNetPresentValue / thisYearsTotal);
+					}
 
 					// Reihe einfügen
 					cashflowTable.appendChild(cashflowTableRow);
@@ -369,7 +393,7 @@ import Cost from "../components/cost.astro";
 			// statische amortisationszeit ???
 			(outputElements[1] as HTMLElement).innerText = (newCase.Investition / moneySavings) !== 0 ?  (newCase.Investition / moneySavings).toFixed(1).replace(".",",") + " Jahre" : "-";
 			// dynamische amortisationszeit ???
-			(outputElements[2] as HTMLElement).innerText = "TODO"; //formatOutput(newCase.Investition / moneySavings, "Jahre");
+			(outputElements[2] as HTMLElement).innerText = dynamischeAmortisation >= 0 ? dynamischeAmortisation.toFixed(1).replace(".",",") + " Jahre" : "-";
 			// kapitalwert nach laufzeit ???
 			(outputElements[3] as HTMLElement).innerText = "TODO"; //formatOutput((moneySavings * newCase.Nutzungsdauer) - newCase.Investition, "€");
 			// energetische einsparung

@@ -91,7 +91,20 @@ import DetailsElement from "./detailsElement.astro";
 		</DetailsElement>
 		<hr />
 		<DetailsElement title="Zusätzliche Einsparungs-/Kostenfaktoren">
-			<button class="icon iconPlus" id="buttonAddNewFactor">Neuen Faktor hinzufügen</button>
+			<table class="basicTable hidden" id="extraFactorsTable">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Einsparung Betrag</th>
+						<th>Art der Einsparung</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<button class="icon iconPlus" id="buttonAddNewFactor" style="align-self: flex-start">Neuen Faktor erstellen</button>
+			
 		</DetailsElement>
 		<hr />
 		<DetailsElement title="Cashflow Tabelle">
@@ -176,7 +189,7 @@ import DetailsElement from "./detailsElement.astro";
 </div>
 
 <style>
-	.basicTable td, .basicTable th {
+	.basicTable :global(td), .basicTable :global(th) {
 		font-size: 13px;
 		color: var(--text);
 		padding: 5px;
@@ -185,7 +198,7 @@ import DetailsElement from "./detailsElement.astro";
 		font-weight: normal;
 	}
 
-	.basicTable td:first-of-type, .basicTable th:first-of-type {
+	.basicTable td:first-of-type, .basicTable :global(th:first-of-type) {
 		text-align: left;
 	}
 
@@ -193,10 +206,29 @@ import DetailsElement from "./detailsElement.astro";
 		font-size: 11px;
 	}
 	
-	.basicTable td input[type="text"] {
-		text-align: right;
+	.basicTable :global(td input[type="text"]) {
 		width: 100%;
+	}
+
+	.basicTable :global(td .unit input[type="text"]) {
+		text-align: right;
 		padding-right: 53px;
+	}
+
+	#extraFactorsTable.hidden {
+		display: none;
+	}
+
+	#extraFactorsTable :global(td) {
+		border-top: 1px solid var(--borders);
+	}
+
+	#extraFactorsTable :global(td:last-of-type) {
+		width: min-content;
+	}
+
+	#extraFactorsTable :global(td select) {
+		text-align: right;
 	}
 
 	#cashflowOutputTable {
@@ -220,11 +252,6 @@ import DetailsElement from "./detailsElement.astro";
 	}
 
 	#cashflowOutputTable :global(tr td section) {
-		display: flex;
-		justify-content: space-between;
-	}
-
-	:global(.extraSavingsFactor) {
 		display: flex;
 		justify-content: space-between;
 	}
