@@ -168,6 +168,8 @@ import Cost from "../components/cost.astro";
 	class extraSavingsFactor {
 		amountInput:HTMLInputElement;
 		typeInput:HTMLSelectElement;
+		frequencyInput:HTMLSelectElement;
+		frequencyValueInput:HTMLInputElement;
 		nameInput:HTMLInputElement;
 		container: HTMLElement;
 		constructor() {
@@ -198,9 +200,25 @@ import Cost from "../components/cost.astro";
 
 			newCell = document.createElement("td");
 			this.typeInput = document.createElement("select") as HTMLSelectElement;
-			this.typeInput.innerHTML = "<option value='1'>Energie</option><option value='2' selected='selected'>Sonstige</option><option value='3'>Unverzinst</option>";
+			this.typeInput.innerHTML = "<option value='1'>Energie [e]</option><option value='2' selected='selected'>Sonstige [p]</option><option value='3'>Unverzinst</option>";
 			this.typeInput.addEventListener("input", () => { parseCost();});
 			newCell.appendChild(this.typeInput);
+			this.container.appendChild(newCell);
+
+			newCell = document.createElement("td");
+			this.frequencyInput = document.createElement("select") as HTMLSelectElement;
+			this.frequencyInput.innerHTML = "<option value='1' selected='selected'>Jährlich</option><option value='2' >Periodisch</option><option value='3'>Einmalig</option>";
+			this.frequencyInput.addEventListener("input", () => { parseCost(); changeExtraSavingsFactorFrequencyInput(this);});
+			newCell.appendChild(this.frequencyInput);
+			this.frequencyValueInput = document.createElement("input") as HTMLInputElement;
+			this.frequencyValueInput.type = "number";
+			this.frequencyValueInput.value = "1";
+			this.frequencyValueInput.placeholder = "Freuqenz";
+			this.frequencyValueInput.classList.add("hidden");
+			this.frequencyValueInput.addEventListener("focusout", () => { parseCost();});
+			this.frequencyValueInput.addEventListener("change", () => { parseCost();});
+			newCell.appendChild(this.frequencyValueInput);
+
 			this.container.appendChild(newCell);
 
 			newCell = document.createElement("td");
@@ -214,13 +232,16 @@ import Cost from "../components/cost.astro";
 		}
 
 		get savings():cashflow | null {
-			if(this.amountInput.valueAsNumber === 0 || isNaN(this.amountInput.valueAsNumber) || this.nameInput.value === "" || this.typeInput.value === "") {
+			if(this.amountInput.valueAsNumber === 0 || isNaN(this.amountInput.valueAsNumber) || this.nameInput.value === "" || this.typeInput.value === "" || this.frequencyInput.value === "" || this.frequencyValueInput.value === "") {
 				return null;
 			}
+
 			return {
 				savings: this.amountInput.valueAsNumber,
 				name: this.nameInput.value,
-				type: parseInt(this.typeInput.value)
+				type: parseInt(this.typeInput.value),
+				frequencyType: parseInt(this.frequencyInput.value),
+				frequencyValue: parseInt(this.frequencyValueInput.value)
 			};
 		}
 	}
@@ -239,16 +260,39 @@ import Cost from "../components/cost.astro";
 		}
 	}
 
+	function changeExtraSavingsFactorFrequencyInput(reference:extraSavingsFactor) {
+		if(reference.frequencyInput.value === "1") {
+			reference.frequencyValueInput.classList.add("hidden");
+			reference.frequencyValueInput.value = "1";
+		} else {
+			reference.frequencyValueInput.classList.remove("hidden");
+			reference.frequencyValueInput.value = "";
+			if(reference.frequencyInput.value === "2") {
+				reference.frequencyValueInput.placeholder = "Alle X Jahre";
+			} else {
+				reference.frequencyValueInput.placeholder = "Jahr";
+			}
+		}
+	}
+
 	enum cashflowType {
 		energy = 1,
 		other = 2,
 		noInterest = 3
 	}
 
+	enum extraFactorFrequency {
+		yearly = 1,
+		periodically = 2,
+		oneTime = 3
+	}
+
 	type cashflow = {
 		savings: number;
 		name: string;
 		type: cashflowType;
+		frequencyType: extraFactorFrequency;
+		frequencyValue: number;
 	}
 
 	type Case = {
@@ -302,18 +346,30 @@ import Cost from "../components/cost.astro";
 						newCashflowYear.push({
 							savings: -newCase.Investition,
 							name: "Investition",
-							type: cashflowType.noInterest	
+							type: cashflowType.noInterest,
+							frequencyType: extraFactorFrequency.oneTime,
+							frequencyValue: 1
 						});
 					} else {
 						// Folgejahre mit Zinsen
 						newCashflowYear.push({
 							savings: moneySavings,
 							name: "Energieeinsparung",
-							type: cashflowType.energy
+							type: cashflowType.energy,
+							frequencyType: extraFactorFrequency.yearly,
+							frequencyValue: 1
 						});
 						for(let j = 0; j < extraSavingsFactors.length; j++) {
-							if(extraSavingsFactors[j].savings !== null) {
-								newCashflowYear.push(extraSavingsFactors[j].savings as cashflow);
+							if(extraSavingsFactors[j].savings === null) {
+								continue;
+							}
+							let currentFactor = extraSavingsFactors[j].savings as cashflow;
+							if(currentFactor.frequencyType === extraFactorFrequency.yearly) {
+								newCashflowYear.push(currentFactor);
+							} else if(currentFactor.frequencyType === extraFactorFrequency.periodically && i % currentFactor.frequencyValue === 0) {
+								newCashflowYear.push(currentFactor);
+							} else if(currentFactor.frequencyType === extraFactorFrequency.oneTime && i === currentFactor.frequencyValue) {
+								newCashflowYear.push(currentFactor);
 							}
 						}
 					}
@@ -329,10 +385,13 @@ import Cost from "../components/cost.astro";
 							+  formatOutput(newCashflowYear[j].savings, "€") 
 							+ "</span></section>\n";
 					}
-					newCell.innerHTML += "<hr />";
-					newCell.innerHTML += "<section><span>Gesamt:</span><span>" 
-						+ formatOutput(thisYearsTotal, "€") 
-						+ "</span></section>\n";
+					if(newCashflowYear.length > 1) {
+						newCell.innerHTML += "<hr />";
+						newCell.innerHTML += "<section><span>Gesamt:</span><span>" 
+							+ formatOutput(thisYearsTotal, "€") 
+							+ "</span></section>\n";
+					}
+					
 					cashflowTableRow.appendChild(newCell);
 					
 					// Abgezinster Cashflow
@@ -358,10 +417,12 @@ import Cost from "../components/cost.astro";
 							+  formatOutput(valueWithInterest, "€") 
 							+ "</span></section>\n";
 					}
-					newCell.innerHTML += "<hr />";
-					newCell.innerHTML += "<section><span>Gesamt:</span><span>" 
-						+ formatOutput(thisYearsTotal, "€") 
-						+ "</span></section>\n";
+					if(newCashflowYear.length > 1) {
+						newCell.innerHTML += "<hr />";
+						newCell.innerHTML += "<section><span>Gesamt:</span><span>" 
+							+ formatOutput(thisYearsTotal, "€") 
+							+ "</span></section>\n";
+					}
 					cashflowTableRow.appendChild(newCell);
 					cumulative += thisYearsTotal;
 					cumulativeNetPresentValue += thisYearsTotal / Math.pow(1 + (newCase.Zinssatz / 100), i);

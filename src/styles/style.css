@@ -75,13 +75,17 @@ to {
 	min-width: 350px;
 }
 
-label {
-	line-height: 29px;
-	position: relative;
+label .standard-label {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	line-height: 25px;
 }
 
 .unit {
 	height: 30px;
+	line-height: 30px;
+	position: relative;
 	display: inline-block;
 }
 
@@ -197,4 +201,8 @@ a, a:visited {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.hidden {
+	display: none;
 }

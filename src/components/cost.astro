@@ -97,13 +97,14 @@ import DetailsElement from "./detailsElement.astro";
 						<th>Name</th>
 						<th>Einsparung Betrag</th>
 						<th>Art der Einsparung</th>
+						<th>Häufigkeit</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
-			<button class="icon iconPlus" id="buttonAddNewFactor" style="align-self: flex-start">Neuen Faktor erstellen</button>
+			<button class="icon iconPlus" id="buttonAddNewFactor" style="align-self: flex-start">Neuen Zusatzfaktor erstellen</button>
 			
 		</DetailsElement>
 		<hr />
@@ -213,10 +214,6 @@ import DetailsElement from "./detailsElement.astro";
 	.basicTable :global(td .unit input[type="text"]) {
 		text-align: right;
 		padding-right: 53px;
-	}
-
-	#extraFactorsTable.hidden {
-		display: none;
 	}
 
 	#extraFactorsTable :global(td) {
