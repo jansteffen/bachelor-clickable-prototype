@@ -6,7 +6,7 @@ import ProtocolEntry from "./protocolEntry.astro";
 	<section class="main-content">
 		<DetailsElement	title="Geschätzter Gesamtfortschritt" >
 			<div class="progress">
-				<div class="progress-bar" style="width: 10%">10%</div>
+				<div class="progress-bar" style="width: 25%">25%</div>
 			</div>
 		</DetailsElement>
 		<DetailsElement title="Neuen Fortschritt protokolieren">
@@ -14,7 +14,7 @@ import ProtocolEntry from "./protocolEntry.astro";
 			<section id="buttons">
 				<label class="unit" data-unit="%">
 					Fortschritt Schätzung:
-					<input type="number" name="progress" placeholder="0" min="10" max="100" value="10" />
+					<input type="number" name="progress" placeholder="0" min="25" max="100" value="25" step="25" />
 				</label>
 				<button class="icon iconAttachment">Datei anhängen</button>
 				<button class="icon iconSave">Speichern</button>

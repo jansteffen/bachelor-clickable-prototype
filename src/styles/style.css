@@ -75,11 +75,12 @@ to {
 	min-width: 350px;
 }
 
-label .standard-label {
+label.standard-label {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
 	line-height: 25px;
+	font-size: 11px;
 }
 
 .unit {
@@ -204,5 +205,5 @@ a:hover {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }

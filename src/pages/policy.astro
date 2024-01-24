@@ -173,20 +173,23 @@ import Cost from "../components/cost.astro";
 		nameInput:HTMLInputElement;
 		container: HTMLElement;
 		constructor() {
-			this.container = document.createElement("tr");
+			this.container = document.createElement("section");
 			this.container.classList.add("extraSavingsFactor");
 
-			let newCell = document.createElement("td");
-
+			let newLabel = document.createElement("label");
+			newLabel.classList.add("standard-label");
+			newLabel.innerText = "Bezeichnung";
 			this.nameInput = document.createElement("input") as HTMLInputElement;
 			this.nameInput.type = "text";
 			this.nameInput.placeholder = "Bezeichnung";
 			this.nameInput.addEventListener("focusout", () => { parseCost();});
 			this.nameInput.addEventListener("change", () => {  parseCost();});
-			newCell.appendChild(this.nameInput);
-			this.container.appendChild(newCell);
+			newLabel.appendChild(this.nameInput);
+			this.container.appendChild(newLabel);
 
-			newCell = document.createElement("td");
+			newLabel = document.createElement("label");
+			newLabel.classList.add("standard-label");
+			newLabel.innerText = "Betrag der Einsparung";
 			let unitWrapper = document.createElement("label");
 			unitWrapper.setAttribute("data-unit", "€");
 			unitWrapper.classList.add("unit");
@@ -195,40 +198,49 @@ import Cost from "../components/cost.astro";
 			this.amountInput.addEventListener("focusout", () => { parseCost();});
 			this.amountInput.addEventListener("change", () => { parseCost();});
 			unitWrapper.appendChild(this.amountInput);
-			newCell.appendChild(unitWrapper);
-			this.container.appendChild(newCell);
+			newLabel.appendChild(unitWrapper);
+			this.container.appendChild(newLabel);
 
-			newCell = document.createElement("td");
+			newLabel = document.createElement("label");
+			newLabel.classList.add("standard-label");
+			newLabel.innerText = "Art der Preissteigerung";
 			this.typeInput = document.createElement("select") as HTMLSelectElement;
 			this.typeInput.innerHTML = "<option value='1'>Energie [e]</option><option value='2' selected='selected'>Sonstige [p]</option><option value='3'>Unverzinst</option>";
 			this.typeInput.addEventListener("input", () => { parseCost();});
-			newCell.appendChild(this.typeInput);
-			this.container.appendChild(newCell);
+			newLabel.appendChild(this.typeInput);
+			this.container.appendChild(newLabel);
 
-			newCell = document.createElement("td");
+			newLabel = document.createElement("label");
+			newLabel.classList.add("standard-label");
+			newLabel.innerText = "Freuqenz";
 			this.frequencyInput = document.createElement("select") as HTMLSelectElement;
 			this.frequencyInput.innerHTML = "<option value='1' selected='selected'>Jährlich</option><option value='2' >Periodisch</option><option value='3'>Einmalig</option>";
 			this.frequencyInput.addEventListener("input", () => { parseCost(); changeExtraSavingsFactorFrequencyInput(this);});
-			newCell.appendChild(this.frequencyInput);
+			newLabel.appendChild(this.frequencyInput);
+			this.container.appendChild(newLabel);
+
+			newLabel = document.createElement("label");
+			newLabel.classList.add("standard-label", "hidden", "frequencyValueInputLabel");
+			newLabel.innerHTML = "<span>Freuqenz</span>";
 			this.frequencyValueInput = document.createElement("input") as HTMLInputElement;
 			this.frequencyValueInput.type = "number";
 			this.frequencyValueInput.value = "1";
 			this.frequencyValueInput.placeholder = "Freuqenz";
-			this.frequencyValueInput.classList.add("hidden");
 			this.frequencyValueInput.addEventListener("focusout", () => { parseCost();});
 			this.frequencyValueInput.addEventListener("change", () => { parseCost();});
-			newCell.appendChild(this.frequencyValueInput);
+			newLabel.appendChild(this.frequencyValueInput);
 
-			this.container.appendChild(newCell);
+			this.container.appendChild(newLabel);
 
-			newCell = document.createElement("td");
-			newCell.innerHTML = "<button class='icon iconTrash'>Löschen</button>";
-			newCell.querySelector("button")?.addEventListener("click", () => {
+			newLabel = document.createElement("label");
+			newLabel.classList.add("standard-label");
+			newLabel.innerText = "Aktionen";
+			newLabel.innerHTML += "<button class='icon iconTrash'>Löschen</button>";
+			newLabel.querySelector("button")?.addEventListener("click", () => {
 				destroyExtraSavingsFactor(this);
 			});
-			this.container.appendChild(newCell);
-			document.getElementById("extraFactorsTable")?.querySelector("tbody")?.appendChild(this.container);
-			document.getElementById("extraFactorsTable")?.classList.remove("hidden");
+			this.container.appendChild(newLabel);
+			document.getElementById("extraFactorsTable")?.appendChild(this.container);
 		}
 
 		get savings():cashflow | null {
@@ -262,16 +274,9 @@ import Cost from "../components/cost.astro";
 
 	function changeExtraSavingsFactorFrequencyInput(reference:extraSavingsFactor) {
 		if(reference.frequencyInput.value === "1") {
-			reference.frequencyValueInput.classList.add("hidden");
-			reference.frequencyValueInput.value = "1";
+			reference.container.querySelector(".frequencyValueInputLabel")?.classList.add("hidden");
 		} else {
-			reference.frequencyValueInput.classList.remove("hidden");
-			reference.frequencyValueInput.value = "";
-			if(reference.frequencyInput.value === "2") {
-				reference.frequencyValueInput.placeholder = "Alle X Jahre";
-			} else {
-				reference.frequencyValueInput.placeholder = "Jahr";
-			}
+			reference.container.querySelector(".frequencyValueInputLabel")?.classList.remove("hidden");
 		}
 	}
 

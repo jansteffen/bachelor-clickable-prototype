@@ -91,7 +91,8 @@ import DetailsElement from "./detailsElement.astro";
 		</DetailsElement>
 		<hr />
 		<DetailsElement title="Zusätzliche Einsparungs-/Kostenfaktoren">
-			<table class="basicTable hidden" id="extraFactorsTable">
+			<div id="extraFactorsTable"></div>
+			<!--<table class="basicTable hidden" id="extraFactorsTable">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -104,6 +105,7 @@ import DetailsElement from "./detailsElement.astro";
 				<tbody>
 				</tbody>
 			</table>
+			-->
 			<button class="icon iconPlus" id="buttonAddNewFactor" style="align-self: flex-start">Neuen Zusatzfaktor erstellen</button>
 			
 		</DetailsElement>
@@ -216,16 +218,22 @@ import DetailsElement from "./detailsElement.astro";
 		padding-right: 53px;
 	}
 
-	#extraFactorsTable :global(td) {
-		border-top: 1px solid var(--borders);
+	#extraFactorsTable {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
 	}
 
-	#extraFactorsTable :global(td:last-of-type) {
-		width: min-content;
+	#extraFactorsTable :global(.extraSavingsFactor) {
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+		flex-wrap: wrap;
+		justify-content: space-between;
 	}
 
-	#extraFactorsTable :global(td select) {
-		text-align: right;
+	#extraFactorsTable :global(.extraSavingsFactor label) {
+		min-width: 29%;
 	}
 
 	#cashflowOutputTable {
