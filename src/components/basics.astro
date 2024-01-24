@@ -20,6 +20,10 @@ import DetailsGrouping from "./detailsGrouping.astro";
 			<AttachmentCard name="Stromzähler Bürogebäude" icon="iconMeter" />
 			<button class="icon iconPlus" style="align-self: start">Datenpunkt hinzufügen</button>
 		</DetailsElement>
+		<label class="checkbox">
+			<input type="checkbox" checked />
+			Automatisch in verbundenen Datenpunkten Notizen erstellen
+		</label>
 	</section>
 	<section class="sidebar">
 		<DetailsGrouping title="Details">
@@ -44,6 +48,10 @@ import DetailsGrouping from "./detailsGrouping.astro";
 				body="Otto Normal"
 			/>
 			<DetailsElement row
+				title="Benachrichtigungsgruppe"
+				body="Energieteam"
+			/>
+			<DetailsElement row
 				title="Datum der Realisierung"
 				body="23. Dezember 2023"
 			/>
@@ -62,3 +70,14 @@ import DetailsGrouping from "./detailsGrouping.astro";
 		</DetailsGrouping>
 	</section>
 </div>
+
+<style>
+	label.checkbox {
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+		align-items: center;
+		justify-content: flex-start;
+		padding-left: 12px;
+	}
+</style>

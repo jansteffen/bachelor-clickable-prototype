@@ -307,6 +307,8 @@ import Cost from "../components/cost.astro";
 		Zinssatz: number;
 		Energiepreissteigerung: number;
 		SonstigePreissteigerung: number;
+		Amortisation: number;
+		cumulative: number;
 	}
 
 	function parseCost():void {
@@ -320,21 +322,19 @@ import Cost from "../components/cost.astro";
 				Nutzungsdauer: parseInput(inputsCase[1]),
 				Zinssatz: parseInput(inputsCase[2]),
 				Energiepreissteigerung: parseInput(inputsCase[3]),
-				SonstigePreissteigerung: parseInput(inputsCase[4])
+				SonstigePreissteigerung: parseInput(inputsCase[4]),
+				Amortisation: -1,
+				cumulative: 0
 			};
 			//cases.push(newCase);
 			let moneySavings, Co2Savings;
 			[moneySavings, Co2Savings] = getSavings();
-			
-			let statischeAmortisation:number = -1;
-			let dynamischeAmortisation:number = -1;
 
 			// Cashflow Tabelle
-			if(caseName === "likelyCase" && newCase.Investition !== 0 && newCase.Nutzungsdauer !== 0 && newCase.Zinssatz !== 0) {
-				let cashflowTable = document.querySelector("#cashflowOutputTable tbody") as HTMLTableElement;
+			if(newCase.Investition !== 0 && newCase.Nutzungsdauer !== 0 && newCase.Zinssatz !== 0) {
+				let cashflowTable = document.querySelector("#cashflowOutputTable tbody." + caseName) as HTMLTableElement;
 				cashflowTable.innerHTML = "";
-				let cumulative:number = 0;
-				let cumulativeNetPresentValue = 0;
+				//let cumulativeNetPresentValue = 0;
 				for (let i = 0; i < newCase.Nutzungsdauer + 1; i++) {
 					let cashflowTableRow = document.createElement("tr");
 
@@ -429,39 +429,41 @@ import Cost from "../components/cost.astro";
 							+ "</span></section>\n";
 					}
 					cashflowTableRow.appendChild(newCell);
-					cumulative += thisYearsTotal;
-					cumulativeNetPresentValue += thisYearsTotal / Math.pow(1 + (newCase.Zinssatz / 100), i);
+					newCase.cumulative += thisYearsTotal;
+					//cumulativeNetPresentValue += thisYearsTotal / Math.pow(1 + (newCase.Zinssatz / 100), i);
 
 					// Kumulativer Cashflow
 					newCell = document.createElement("td");
-					newCell.innerText = formatOutput(cumulative, "€");
+					newCell.innerText = formatOutput(newCase.cumulative, "€");
 					cashflowTableRow.appendChild(newCell);
 
+					if(newCase.cumulative > 0 && newCase.Amortisation === -1) {
+						console.log("break even point erreicht im Jahr " + i);
+						newCase.Amortisation = i - (newCase.cumulative / thisYearsTotal);
+					}
 
 					// Dynamische Amortisation
-					if(cumulativeNetPresentValue > 0 && dynamischeAmortisation === -1) {
+					/* if(cumulativeNetPresentValue > 0 && dynamischeAmortisation === -1) {
 						console.log("break even point erreicht im Jahr " + i);
 						dynamischeAmortisation = i - (cumulativeNetPresentValue / thisYearsTotal);
-					}
+					} */
 
 					// Reihe einfügen
 					cashflowTable.appendChild(cashflowTableRow);
 				}
 			}
-
-
-			// gesamt / ( 1+ kalkulatorischer zinssatz) ^ Jahreszahl			
 			
 			// Ergebniss Tabelle
 			let outputElements = document.querySelectorAll("#tabCost .main-content .outputCost." + caseName);
 			// interne verzinsung ???
+			
 			(outputElements[0] as HTMLElement).innerText = "TODO"; //formatOutput(newCase.Zinssatz, "%");
 			// statische amortisationszeit ???
-			(outputElements[1] as HTMLElement).innerText = (newCase.Investition / moneySavings) !== 0 ?  (newCase.Investition / moneySavings).toFixed(1).replace(".",",") + " Jahre" : "-";
+			(outputElements[1] as HTMLElement).innerText = (newCase.Investition / moneySavings) > 0 ? (newCase.Investition / moneySavings).toFixed(1).replace(".",",") + " Jahre" : "-";
 			// dynamische amortisationszeit ???
-			(outputElements[2] as HTMLElement).innerText = dynamischeAmortisation >= 0 ? dynamischeAmortisation.toFixed(1).replace(".",",") + " Jahre" : "-";
-			// kapitalwert nach laufzeit ???
-			(outputElements[3] as HTMLElement).innerText = "TODO"; //formatOutput((moneySavings * newCase.Nutzungsdauer) - newCase.Investition, "€");
+			(outputElements[2] as HTMLElement).innerText = newCase.Amortisation >= 0 ? newCase.Amortisation.toFixed(1).replace(".",",") + " Jahre" : "-";
+			// kapitalwert nach laufzeit
+			(outputElements[3] as HTMLElement).innerText = formatOutput(newCase.cumulative/Math.pow(1 + (newCase.Zinssatz/100), newCase.Nutzungsdauer), "€");
 			// energetische einsparung
 			(outputElements[4] as HTMLElement).innerText = formatOutput(totalEnergySavings * newCase.Nutzungsdauer, "kWh");
 			// finanzielle einsparung

@@ -10,25 +10,25 @@ import ProtocolEntry from "./protocolEntry.astro";
 			</div>
 		</DetailsElement>
 		<DetailsElement title="Neuen Fortschritt protokolieren">
-			<textarea name="comment" rows="3" placeholder="Ergänzen Sie das Protokoll um eine weitere Notiz..."></textarea>
-			<section id="buttons">
-				<label class="unit" data-unit="%">
-					Fortschritt Schätzung:
-					<input type="number" name="progress" placeholder="0" min="25" max="100" value="25" step="25" />
-				</label>
-				<button class="icon iconAttachment">Datei anhängen</button>
-				<button class="icon iconSave">Speichern</button>
-			</section>
+			<textarea name="comment" rows="2" placeholder="Ergänzen Sie das Protokoll um einen weiteren Eintrag..."></textarea>
 		</DetailsElement>
+		<section id="buttons">
+			<label class="unit" data-unit="%">
+				Fortschritt Schätzung:
+				<input type="number" dir="rtl" name="progress" placeholder="0" min="25" max="100" value="25" step="25" />
+			</label>
+			<button class="icon iconAttachment">Datei anhängen</button>
+			<button class="icon iconSave">Speichern</button>
+		</section>
 		<hr />
 		<DetailsElement title="Bearbeitungsprotokoll" />
 		<ProtocolEntry body="Die ersten Teile wurden Heute zusammengebaut und für den Einbau vorbereitet.">
-			<b>Otto Normal</b> protokolliert <b>10%</b> am 29. Oktober 2023
+			<b>Otto Normal</b> protokolliert <b>25%</b> am 29. Oktober 2023
 		</ProtocolEntry>
 		<ProtocolEntry centered>
 			<b>Max Mustermann</b> hat <b>Otto Normal</b> zugewiesen am 23. September 2023
 		</ProtocolEntry>
-		<ProtocolEntry body="Die ersten Teile wurden Heute zusammengebaut und für den Einbau vorbereitet.">
+		<ProtocolEntry body="Die neue Anlage wurde geliefert und gelagert, die Hausverwaltung und der Elektriker wissen Bescheid.">
 			<b>Max Mustermann</b> am 18. September 2023
 		</ProtocolEntry>
 		<ProtocolEntry centered>
@@ -53,8 +53,7 @@ import ProtocolEntry from "./protocolEntry.astro";
 		background-color: #1ccc5f;
 		border-radius: 100px;
 		font-size: 13px;
-		line-height: 25px;
-		padding-bottom: 1px;
+		line-height: 26px;
 		text-align: center;
 		color: #fff;
 	}
@@ -64,11 +63,19 @@ import ProtocolEntry from "./protocolEntry.astro";
 	}
 
 	input[type="number"] {
-		min-width: 70px;
-		width: 70px;
+		min-width: 90px;
+		width: 90px;
 		padding-right: 38px;
 		margin-left: 10px;
+  		appearance: initial;
 	}
 
+	/* Chrome, Safari, Edge, Opera */
+	input[type=number]::-webkit-outer-spin-button,
+	input[type=number]::-webkit-inner-spin-button {
+		-webkit-appearance: initial;
+		display: initial;
+		margin: initial;
+	}
 
 </style>

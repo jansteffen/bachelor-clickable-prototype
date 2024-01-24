@@ -111,6 +111,11 @@ import DetailsElement from "./detailsElement.astro";
 		</DetailsElement>
 		<hr />
 		<DetailsElement title="Cashflow Tabelle">
+			<nav id="cashflowTableTabs">
+				<a class="likelyCase">Wahrscheinlichster Fall</a>
+				<a class="bestCase">Best case</a>
+				<a class="worstCase">Worst case</a>
+			</nav>
 			<table id="cashflowOutputTable">
 				<thead>
 					<tr>
@@ -120,7 +125,17 @@ import DetailsElement from "./detailsElement.astro";
 						<th>Kumuliert</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="likelyCase">
+					<tr>
+						<td colspan="4">Geben Sie Investition, Nutzungsdauer und kalkulatorischer Zins an um die Berechnung zu starten.</td>
+					</tr>
+				</tbody>
+				<tbody class="bestCase hidden">
+					<tr>
+						<td colspan="4">Geben Sie Investition, Nutzungsdauer und kalkulatorischer Zins an um die Berechnung zu starten.</td>
+					</tr>
+				</tbody>
+				<tbody class="worstCase hidden">
 					<tr>
 						<td colspan="4">Geben Sie Investition, Nutzungsdauer und kalkulatorischer Zins an um die Berechnung zu starten.</td>
 					</tr>
@@ -190,6 +205,27 @@ import DetailsElement from "./detailsElement.astro";
 		</DetailsElement>
 	</section>
 </div>
+<script>
+	let tabLinks = document.querySelectorAll("#cashflowTableTabs a");
+	for (let i = 0; i < tabLinks.length; i++) {
+		tabLinks[i].addEventListener("click", function() {
+			switchTab(i);
+		});
+	}
+
+	switchTab(0);
+
+	function switchTab(tabNumber:number) {
+		let tabs = document.querySelectorAll("#cashflowOutputTable tbody");
+		
+		for (let i = 0; i < tabs.length; i++) {
+			tabs[i].classList.add("hidden");
+			tabLinks[i].classList.remove("active");
+		}
+		tabs[tabNumber].classList.remove("hidden");
+		document.getElementById("cashflowTableTabs")?.children[tabNumber].classList.add("active");
+	}
+</script>
 
 <style>
 	.basicTable :global(td), .basicTable :global(th) {
@@ -234,6 +270,35 @@ import DetailsElement from "./detailsElement.astro";
 
 	#extraFactorsTable :global(.extraSavingsFactor label) {
 		min-width: 29%;
+	}
+
+	#cashflowTableTabs {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-content: center;
+		border-radius: 100px;
+		overflow: hidden;
+	}
+
+	#cashflowTableTabs a {
+		flex-grow: 1;
+		background-color: #d9d9d9;
+		padding: 10px;
+		text-align: center;
+		color: var(--text-light);
+		cursor: pointer;
+	}
+
+	#cashflowTableTabs a:hover {
+		background-color: #fff;
+		color: var(--text);
+	}
+
+	#cashflowTableTabs a.active {
+		background-color: #f9f9f9;
+		color: var(--text);
+		cursor: default;
 	}
 
 	#cashflowOutputTable {
