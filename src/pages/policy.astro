@@ -45,11 +45,17 @@ import Cost from "../components/cost.astro";
 	}
 	//#endregion
 
-	function formatOutput(value:number, unit:string):string {
+	function formatOutput(value:number, unit:string, digits:number = 0):string {
 		if(value == 0 || value == Infinity || isNaN(value)) {
 			return "-";
 		}
-		return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " " + unit;
+		let valueString = "";
+		if(digits === 0){
+			valueString = Math.round(value).toString();
+		} else {
+			valueString = value.toFixed(digits).replace(".",",");
+		} value.toFixed(digits).replace(".",",");
+		return valueString.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " " + unit;
 	}
 
 	function parseInput(inputElement:Element):number {
@@ -309,6 +315,7 @@ import Cost from "../components/cost.astro";
 		SonstigePreissteigerung: number;
 		Amortisation: number;
 		cumulative: number;
+		yearlyTotals: Array<number>;
 	}
 
 	function parseCost():void {
@@ -324,7 +331,8 @@ import Cost from "../components/cost.astro";
 				Energiepreissteigerung: parseInput(inputsCase[3]),
 				SonstigePreissteigerung: parseInput(inputsCase[4]),
 				Amortisation: -1,
-				cumulative: 0
+				cumulative: 0,
+				yearlyTotals: []
 			};
 			//cases.push(newCase);
 			let moneySavings, Co2Savings;
@@ -430,6 +438,7 @@ import Cost from "../components/cost.astro";
 					}
 					cashflowTableRow.appendChild(newCell);
 					newCase.cumulative += thisYearsTotal;
+					newCase.yearlyTotals.push(thisYearsTotal);
 					//cumulativeNetPresentValue += thisYearsTotal / Math.pow(1 + (newCase.Zinssatz / 100), i);
 
 					// Kumulativer Cashflow
@@ -453,15 +462,34 @@ import Cost from "../components/cost.astro";
 				}
 			}
 			
+			// Berechnung interne Verzinsung
+			let internalRateOfReturn = newCase.Zinssatz;
+			let internalRateOfReturnStep = 5;
+			let difference = newCase.cumulative;
+			while(Math.abs(difference) > 1000 && internalRateOfReturnStep > 0.01) {
+				if (difference > 0) {
+					internalRateOfReturn += internalRateOfReturnStep
+				} else {
+					internalRateOfReturn -= internalRateOfReturnStep
+				}
+				difference = 0;
+				for(let i = 0; i < newCase.yearlyTotals.length; i++) {
+					difference += newCase.yearlyTotals[i] / Math.pow(1 + (internalRateOfReturn / 100), i);
+				}
+
+				internalRateOfReturnStep *=  0.90;
+			}
+			
+
+
 			// Ergebniss Tabelle
 			let outputElements = document.querySelectorAll("#tabCost .main-content .outputCost." + caseName);
-			// interne verzinsung ???
-			
-			(outputElements[0] as HTMLElement).innerText = "TODO"; //formatOutput(newCase.Zinssatz, "%");
+			// interne verzinsung
+			(outputElements[0] as HTMLElement).innerText = formatOutput(internalRateOfReturn, "%", 2);
 			// statische amortisationszeit ???
-			(outputElements[1] as HTMLElement).innerText = (newCase.Investition / moneySavings) > 0 ? (newCase.Investition / moneySavings).toFixed(1).replace(".",",") + " Jahre" : "-";
+			(outputElements[1] as HTMLElement).innerText = (newCase.Investition / moneySavings) > 0 ? formatOutput(newCase.Investition / moneySavings,"Jahre", 1) : "-";
 			// dynamische amortisationszeit ???
-			(outputElements[2] as HTMLElement).innerText = newCase.Amortisation >= 0 ? newCase.Amortisation.toFixed(1).replace(".",",") + " Jahre" : "-";
+			(outputElements[2] as HTMLElement).innerText = newCase.Amortisation >= 0 ? formatOutput(newCase.Amortisation, "Jahre", 1) : "-";
 			// kapitalwert nach laufzeit
 			(outputElements[3] as HTMLElement).innerText = formatOutput(newCase.cumulative/Math.pow(1 + (newCase.Zinssatz/100), newCase.Nutzungsdauer), "€");
 			// energetische einsparung
